@@ -1,0 +1,153 @@
+[gd_scene format=3 uid="uid://b272lb2i428oc"]
+
+[ext_resource type="Shader" uid="uid://bhxiq0qvipf4p" path="res://pause_menu.gdshader" id="1_hdmo1"]
+[ext_resource type="Script" uid="uid://dl64id8x2bwc2" path="res://pause_menu.gd" id="1_nwcfo"]
+[ext_resource type="Texture2D" uid="uid://by1v1fdlnqykf" path="res://Menu/resume.png" id="3_g7dbl"]
+[ext_resource type="Texture2D" uid="uid://c647vnxwlrcl5" path="res://Menu/Assets/Panel/panel.png" id="3_lv42l"]
+[ext_resource type="Texture2D" uid="uid://chc68jdxw3fhx" path="res://Menu/resume_pressed.png" id="4_lv42l"]
+[ext_resource type="Texture2D" uid="uid://dwbnb453ctlkt" path="res://Menu/resume_hover.png" id="5_ub45p"]
+[ext_resource type="Texture2D" uid="uid://c54y34grd17pj" path="res://Menu/Assets/Buttons/Restart.png" id="7_lv42l"]
+[ext_resource type="Texture2D" uid="uid://c4vq2ume67xct" path="res://Menu/Assets/Buttons/Restart_pressed.png" id="8_ub45p"]
+[ext_resource type="Texture2D" uid="uid://dcmh02xq6rc2s" path="res://Menu/Assets/Buttons/Restart_hover.png" id="9_42xcf"]
+[ext_resource type="Texture2D" uid="uid://c20jwcg3dkohb" path="res://Menu/Assets/Buttons/main.png" id="10_lv42l"]
+[ext_resource type="Texture2D" uid="uid://b8wxsaoa54l5r" path="res://Menu/Assets/Buttons/main_pressed.png" id="11_ub45p"]
+[ext_resource type="Texture2D" uid="uid://ds0bnd56tkuel" path="res://Menu/Assets/Buttons/main_hover.png" id="12_42xcf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nwcfo"]
+shader = ExtResource("1_hdmo1")
+shader_parameter/lod = 0.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ub45p"]
+texture = ExtResource("3_lv42l")
+
+[sub_resource type="Animation" id="Animation_hdmo1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_nwcfo"]
+resource_name = "blur"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.886000042085]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_05uyy"]
+_data = {
+&"RESET": SubResource("Animation_hdmo1"),
+&"blur": SubResource("Animation_nwcfo")
+}
+
+[node name="pause_menu" type="Control" unique_id=1091801763]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nwcfo")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1110835489]
+material = SubResource("ShaderMaterial_nwcfo")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=2016387560]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.50003
+offset_top = -138.0
+offset_right = 18.130127
+offset_bottom = 25.835602
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.825, 1.825)
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_ub45p")
+
+[node name="PauseButtons" type="VBoxContainer" parent="PanelContainer" unique_id=60736874]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="resume" type="TextureButton" parent="PanelContainer/PauseButtons" unique_id=533711894]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("3_g7dbl")
+texture_pressed = ExtResource("4_lv42l")
+texture_hover = ExtResource("5_ub45p")
+
+[node name="restart" type="TextureButton" parent="PanelContainer/PauseButtons" unique_id=1567840289]
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("7_lv42l")
+texture_pressed = ExtResource("8_ub45p")
+texture_hover = ExtResource("9_42xcf")
+
+[node name="mainmenu" type="TextureButton" parent="PanelContainer/PauseButtons" unique_id=1582977165]
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("10_lv42l")
+texture_pressed = ExtResource("11_ub45p")
+texture_hover = ExtResource("12_42xcf")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=270463564]
+libraries/ = SubResource("AnimationLibrary_05uyy")
+
+[connection signal="pressed" from="PanelContainer/PauseButtons/resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="PanelContainer/PauseButtons/restart" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="PanelContainer/PauseButtons/mainmenu" to="." method="_on_mainmenu_pressed"]

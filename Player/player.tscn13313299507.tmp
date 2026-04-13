@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://35kc38knyae4"]
+
+[ext_resource type="Script" uid="uid://biv4kgpbtk02d" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
+[ext_resource type="Texture2D" uid="uid://c7kbftsgoh51n" path="res://Player/Sprites/Main_Character_Walking-removebg-preview.png" id="1_l8h54"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_edjgo"]
+
+[sub_resource type="Animation" id="Animation_4ntmi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_btcbx"]
+resource_name = "walk_right"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.13333334, 0.26666668, 0.4, 0.53333336, 0.6666667, 0.8, 0.96666664),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gwnis"]
+_data = {
+&"RESET": SubResource("Animation_4ntmi"),
+&"walk_right": SubResource("Animation_btcbx")
+}
+
+[node name="Player" type="CharacterBody2D" unique_id=1872429895]
+script = ExtResource("1_4ntmi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2070372597]
+shape = SubResource("CircleShape2D_edjgo")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1512079031]
+position = Vector2(14, -23)
+texture = ExtResource("1_l8h54")
+hframes = 8
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1012186521]
+libraries/ = SubResource("AnimationLibrary_gwnis")

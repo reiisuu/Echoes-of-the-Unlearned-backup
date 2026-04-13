@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://3hr2bmxkhaf3"
+path="res://.godot/imported/Cold Whisper - 48kHz.wav-0222df05dc05a45c7f891b4f9824c3d5.sample"
+
+[deps]
+
+source_file="res://Menu/Assets/Sound/Cold Whisper - 48kHz.wav"
+dest_files=["res://.godot/imported/Cold Whisper - 48kHz.wav-0222df05dc05a45c7f891b4f9824c3d5.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
