@@ -16,7 +16,7 @@ colors = PackedColorArray(0.8627451, 0.34117648, 0.34117648, 1, 0.9019608, 0.498
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_lw41g"]
 gradient = SubResource("Gradient_0ghc8")
 
-[node name="PlayerHud" type="CanvasLayer" unique_id=1758150444]
+[node name="PlayerHud" type="CanvasLayer" unique_id=1758150444 groups=["player_hud"]]
 process_mode = 3
 layer = 2
 script = ExtResource("1_df1tv")

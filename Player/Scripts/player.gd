@@ -8,6 +8,7 @@ var cardinal_direction: Vector2 = Vector2.RIGHT
 var direction: Vector2 = Vector2.ZERO
 var isRunning: bool = false
 
+
 @onready var behavior_logger: PlayerBehaviorLogger = $PlayerBehaviorLogger
 
 @export var move_speed: float = 300.0
@@ -40,7 +41,6 @@ var parry_cooldown: float = 0.5
 var parry_cd_timer: float = 0.0
 var invuln_timer: float = 0.0
 var parry_iframes_on_success: float = 0.15
-var parry_successful: bool = false
 
 @export var slam_speed: float = 1400.0
 @export var slam_damage: int = 2
@@ -94,9 +94,11 @@ var normal_modulate: Color = Color(1, 1, 1, 1)
 @onready var heal_timer: Timer = $HealTimer
 @onready var charged_attack_timer: Timer = $ChargedAttackTimer
 
+@onready var hud = get_tree().get_first_node_in_group("player_hud")
+
 @export var invulnerable: bool = false
-var hp: int = 20
-var maxHp: int = 20
+var hp: int = 12
+var maxHp: int = 12
 
 var input_x: float = 0.0
 var coyote_timer: float = 0.0
@@ -142,6 +144,9 @@ func _ready() -> void:
 	jumps_left = max_jumps
 	was_on_floor = is_on_floor()
 	update_hp(99)
+	if hud and hud.has_method("update_health_bar"):
+		hud.update_health_bar(hp, maxHp)
+	call_deferred("refresh_hud")
 
 func _process(delta: float) -> void:
 	input_x = Input.get_axis("left", "right")
@@ -149,7 +154,7 @@ func _process(delta: float) -> void:
 	setDirection()
 	
 	if Input.is_action_just_pressed("ui_accept"): # Enter key by default
-		die()
+		die()  
 
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = jump_buffer_time
@@ -172,9 +177,10 @@ func _process(delta: float) -> void:
 
 	if not (state_machine.current_state is State_Parry):
 		is_parrying = false
-		parry_successful = false
 
 func _physics_process(delta: float) -> void:
+	# ALL your movement + velocity logic first
+
 	if dash_cooldown_timer > 0.0:
 		dash_cooldown_timer -= delta
 		if dash_cooldown_timer <= 0.0:
@@ -236,15 +242,19 @@ func update_effect_directions() -> void:
 
 	var offset := 25.0  # adjust per effect
 
+	# Light attack
 	if light_attack_effect:
 		light_attack_effect.position.x = -offset if facing_left else offset
 
+	# Dash
 	if dash_effect:
 		dash_effect.position.x = -offset if facing_left else offset
 
+	# Charged attack
 	if charged_attack_effect:
 		charged_attack_effect.position.x = -offset if facing_left else offset
 
+	# Centered effects (no movement)
 	if slam_effect:
 		slam_effect.position.x = 0
 
@@ -456,7 +466,6 @@ func _take_damage(hurtbox: Hurtbox) -> void:
 	if is_parrying:
 		print("PARRY SUCCESS")
 		var attacker := hurtbox.owner
-		parry_successful = true
 		on_successful_parry(attacker)
 		return
 
@@ -475,6 +484,19 @@ func _take_damage(hurtbox: Hurtbox) -> void:
 func update_hp(delta: int) -> void:
 	hp = clampi(hp + delta, 0, maxHp)
 
+	if hud == null:
+		hud = get_tree().get_first_node_in_group("player_hud")
+
+	if hud and hud.has_method("update_health_bar"):
+		hud.update_health_bar(hp, maxHp)
+
+func refresh_hud() -> void:
+	if hud == null:
+		hud = get_tree().get_first_node_in_group("player_hud")
+
+	if hud and hud.has_method("update_health_bar"):
+		hud.update_health_bar(hp, maxHp)
+
 func make_invulnerable(_duration: float = 1.0) -> void:
 	invulnerable = true
 	hitbox.monitoring = false
@@ -486,12 +508,14 @@ func make_invulnerable(_duration: float = 1.0) -> void:
 
 func on_successful_parry(attacker: Node) -> void:
 	is_parrying = false
-	parry_successful = true
 	invulnerable = true
-	invuln_timer = 0.30
+	invuln_timer = parry_iframes_on_success
 
 	if attacker != null and attacker.has_method("on_parried"):
 		attacker.on_parried()
+
+	if state_machine.current_state is State_Parry:
+		state_machine.ChangeState($StateMachine/Idle)
 
 func play_effect(effect_name: String, _centered: bool = false) -> void:
 	match effect_name:
