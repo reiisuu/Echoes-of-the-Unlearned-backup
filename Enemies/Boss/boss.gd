@@ -1,223 +1,218 @@
-extends Enemy
 class_name Boss
+extends Enemy
 
-enum BossPhase {
-	PHASE_1 = 1,
-	PHASE_2 = 2,
-	PHASE_3 = 3
+@export var normal_cooldown: float = 0.75
+@export var heavy_cooldown: float = 1.8
+@export var stomp_cooldown: float = 2.2
+@export var punish_cooldown: float = 1.1
+@export var backstep_cooldown: float = 1.4
+
+@export var phase_2_hp_ratio: float = 0.5
+@export var base_chase_speed: float = 42.0
+@export var phase_2_chase_speed: float = 58.0
+
+@export var punish_distance: float = 42.0
+@export var backstep_trigger_distance: float = 22.0
+
+var in_phase_2: bool = false
+var max_hp_value: int = 1
+
+var _cooldowns := {
+	"normal": 0.0,
+	"heavy": 0.0,
+	"stomp": 0.0,
+	"punish": 0.0,
+	"backstep": 0.0
 }
 
-@export var boss_max_hp: int = 20
+@onready var body_hurtbox: Hurtbox = $Hurtbox
+@onready var attack_hurtbox: Hurtbox = $AttackHurtbox
+@onready var heavy_hurtbox: Hurtbox = $HeavyHurtbox
+@onready var stomp_hurtbox: Hurtbox = $StompHurtbox
 
-@export var phase_1_speed: float = 55.0
-@export var phase_2_speed: float = 75.0
-@export var phase_3_speed: float = 100.0
+var _attack_box_base_position: Vector2 = Vector2.ZERO
+var _heavy_box_base_position: Vector2 = Vector2.ZERO
+var _stomp_box_base_position: Vector2 = Vector2.ZERO
 
-@export var attack_cooldown_time: float = 1.0
-@export var heavy_cooldown_time: float = 2.0
-@export var stomp_cooldown_time: float = 4.0
-@export var feint_cooldown_time: float = 3.0
-
-var current_phase: int = BossPhase.PHASE_1
-var pending_phase: int = BossPhase.PHASE_1
-
-var boss_move_speed: float = 55.0
-
-var is_attacking: bool = false
-var is_phase_changing: bool = false
-
-var attack_cd: float = 0.0
-var heavy_cd: float = 0.0
-var stomp_cd: float = 0.0
-var feint_cd: float = 0.0
-
-var player_in_attack_range: bool = false
-var current_attack_name: String = ""
-
-@onready var stomp_hitbox: Area2D = get_node_or_null("StompHitbox")
-@onready var attack_range_area: Area2D = get_node_or_null("AttackRange")
-
-@onready var attack_state: EnemyState = $EnemyStateMachine/Attack
-@onready var heavy_attack_state: EnemyState = $EnemyStateMachine/HeavyAttack
-@onready var stomp_state: EnemyState = $EnemyStateMachine/Stomp
-@onready var feint_state: EnemyState = $EnemyStateMachine/Feint
-@onready var phase_transition_state: EnemyState = $EnemyStateMachine/PhaseTransition
+var _active_attack_box: Hurtbox = null
 
 func _ready() -> void:
-	hp = boss_max_hp
-	super._ready()
+	super()
 
-	print("BOSS READY")
-	print("boss sprite = ", sprite)
-	if sprite and sprite.sprite_frames:
-		print("boss animations = ", sprite.sprite_frames.get_animation_names())
+	max_hp_value = hp
 
-	set_main_hitbox_enabled(false)
-	set_stomp_hitbox_enabled(false)
+	if attack_hurtbox:
+		_attack_box_base_position = attack_hurtbox.position
+	if heavy_hurtbox:
+		_heavy_box_base_position = heavy_hurtbox.position
+	if stomp_hurtbox:
+		_stomp_box_base_position = stomp_hurtbox.position
 
-	if attack_range_area:
-		print("ATTACK RANGE NODE = ", attack_range_area)
-		print("ATTACK RANGE monitoring = ", attack_range_area.monitoring)
+	_connect_attack_hurtbox_signals()
 
-		var attack_shape: CollisionShape2D = attack_range_area.get_node_or_null("CollisionShape2D")
-		print("ATTACK RANGE shape = ", attack_shape)
-		if attack_shape:
-			print("ATTACK RANGE shape disabled = ", attack_shape.disabled)
+	if attack_hurtbox:
+		attack_hurtbox.monitoring = false
+	if heavy_hurtbox:
+		heavy_hurtbox.monitoring = false
+	if stomp_hurtbox:
+		stomp_hurtbox.monitoring = false
 
-		print("ATTACK RANGE collision layer = ", attack_range_area.collision_layer)
-		print("ATTACK RANGE collision mask = ", attack_range_area.collision_mask)
+	_active_attack_box = null
+	reset_attack_window()
 
-	apply_phase_stats()
+func _physics_process(_delta: float) -> void:
+	_tick_cooldowns(_delta)
+	_try_enter_phase_2()
+	super(_delta)
 
-func _process(delta: float) -> void:
-	_tick_cooldowns(delta)
+func _tick_cooldowns(_delta: float) -> void:
+	for key in _cooldowns.keys():
+		_cooldowns[key] = max(_cooldowns[key] - _delta, 0.0)
 
-func _tick_cooldowns(delta: float) -> void:
-	attack_cd = max(attack_cd - delta, 0.0)
-	heavy_cd = max(heavy_cd - delta, 0.0)
-	stomp_cd = max(stomp_cd - delta, 0.0)
-	feint_cd = max(feint_cd - delta, 0.0)
+func _try_enter_phase_2() -> void:
+	if in_phase_2:
+		return
 
-func has_player() -> bool:
-	return player != null and is_instance_valid(player)
+	var threshold := int(ceil(float(max_hp_value) * phase_2_hp_ratio))
+	threshold = max(threshold, 1)
 
-func distance_to_player() -> float:
-	if not has_player():
-		return INF
-	return global_position.distance_to(player.global_position)
+	if hp <= threshold:
+		in_phase_2 = true
 
-func direction_to_player() -> Vector2:
-	if not has_player():
-		return Vector2.ZERO
-	return (player.global_position - global_position).normalized()
+func get_chase_speed() -> float:
+	return phase_2_chase_speed if in_phase_2 else base_chase_speed
 
-func face_player() -> void:
-	var dir := direction_to_player()
-	if dir != Vector2.ZERO:
-		setDirection(Vector2(sign(dir.x), 0))
+func can_use_attack(name: String) -> bool:
+	if not _cooldowns.has(name):
+		return true
+	return _cooldowns[name] <= 0.0
 
-func is_player_in_chase_range() -> bool:
-	if not has_player():
-		return false
-	return player_in_range
-
-func is_player_in_attack_range() -> bool:
-	if not has_player():
-		return false
-	return player_in_attack_range
-
-func get_phase_from_hp() -> int:
-	var hp_ratio := float(hp) / float(max(boss_max_hp, 1))
-
-	if hp_ratio <= 0.35:
-		return BossPhase.PHASE_3
-	elif hp_ratio <= 0.70:
-		return BossPhase.PHASE_2
-	else:
-		return BossPhase.PHASE_1
-
-func needs_phase_transition() -> bool:
-	pending_phase = get_phase_from_hp()
-	return pending_phase != current_phase
-
-func begin_phase_transition() -> void:
-	is_phase_changing = true
-	is_attacking = false
-	current_attack_name = ""
-	velocity = Vector2.ZERO
-	set_main_hitbox_enabled(false)
-	set_stomp_hitbox_enabled(false)
-
-func finish_phase_transition() -> void:
-	current_phase = pending_phase
-	apply_phase_stats()
-	is_phase_changing = false
-
-func apply_phase_stats() -> void:
-	match current_phase:
-		BossPhase.PHASE_1:
-			boss_move_speed = phase_1_speed
-		BossPhase.PHASE_2:
-			boss_move_speed = phase_2_speed
-		BossPhase.PHASE_3:
-			boss_move_speed = phase_3_speed
-
-func choose_attack_state() -> EnemyState:
-	if is_phase_changing:
-		return null
-
-	if needs_phase_transition():
-		return phase_transition_state
-
-	# priority can be changed anytime later
-	if current_phase >= BossPhase.PHASE_3 and feint_cd <= 0.0 and feint_state != null:
-		print("BOSS CHOOSE: FEINT")
-		return feint_state
-
-	if current_phase >= BossPhase.PHASE_2 and stomp_cd <= 0.0 and stomp_state != null:
-		print("BOSS CHOOSE: STOMP")
-		return stomp_state
-
-	if current_phase >= BossPhase.PHASE_2 and heavy_cd <= 0.0 and heavy_attack_state != null:
-		print("BOSS CHOOSE: HEAVY")
-		return heavy_attack_state
-
-	if attack_cd <= 0.0 and attack_state != null:
-		print("BOSS CHOOSE: ATTACK")
-		return attack_state
-
-	print("BOSS CHOOSE: NONE")
-	return null
-
-func start_attack(attack_name: String = "attack") -> void:
-	is_attacking = true
-	current_attack_name = attack_name
-	velocity = Vector2.ZERO
-	face_player()
-
-	set_main_hitbox_enabled(false)
-	set_stomp_hitbox_enabled(false)
-
-func finish_attack(attack_name: String) -> void:
-	is_attacking = false
-	current_attack_name = ""
-	velocity = Vector2.ZERO
-
-	set_main_hitbox_enabled(false)
-	set_stomp_hitbox_enabled(false)
-
-	match attack_name:
-		"attack":
-			attack_cd = attack_cooldown_time
+func mark_attack_used(name: String) -> void:
+	match name:
+		"normal":
+			_cooldowns["normal"] = normal_cooldown
 		"heavy":
-			heavy_cd = heavy_cooldown_time
+			_cooldowns["heavy"] = heavy_cooldown
 		"stomp":
-			stomp_cd = stomp_cooldown_time
-		"feint":
-			feint_cd = feint_cooldown_time
+			_cooldowns["stomp"] = stomp_cooldown
+		"punish":
+			_cooldowns["punish"] = punish_cooldown
+		"backstep":
+			_cooldowns["backstep"] = backstep_cooldown
 
-func set_main_hitbox_enabled(enabled: bool) -> void:
-	if hitbox:
-		hitbox.monitoring = enabled
-		var shape: CollisionShape2D = hitbox.get_node_or_null("CollisionShape2D")
-		if shape:
-			shape.disabled = not enabled
+func face_player(dx: float) -> void:
+	if abs(dx) < 0.01:
+		return
+	setDirection(Vector2(sign(dx), 0.0))
 
-func set_stomp_hitbox_enabled(enabled: bool) -> void:
-	if stomp_hitbox:
-		stomp_hitbox.monitoring = enabled
-		var shape: CollisionShape2D = stomp_hitbox.get_node_or_null("CollisionShape2D")
-		if shape:
-			shape.disabled = not enabled
+func _apply_box_facing() -> void:
+	super()
 
-func _on_attack_range_body_entered(body: Node) -> void:
-	print("ATTACK RANGE BODY ENTERED: ", body)
-	if body is Player:
-		player_in_attack_range = true
-		print("BOSS ATTACK RANGE: ENTER")
+	var facing_sign := 1.0 if cardinal_direction == Vector2.RIGHT else -1.0
 
-func _on_attack_range_body_exited(body: Node) -> void:
-	print("ATTACK RANGE BODY EXITED: ", body)
-	if body is Player:
-		player_in_attack_range = false
-		print("BOSS ATTACK RANGE: EXIT")
+	if attack_hurtbox:
+		attack_hurtbox.position.x = abs(_attack_box_base_position.x) * facing_sign
+		attack_hurtbox.position.y = _attack_box_base_position.y
+
+	if heavy_hurtbox:
+		heavy_hurtbox.position.x = abs(_heavy_box_base_position.x) * facing_sign
+		heavy_hurtbox.position.y = _heavy_box_base_position.y
+
+	if stomp_hurtbox:
+		stomp_hurtbox.position = _stomp_box_base_position
+
+func _connect_attack_hurtbox_signals() -> void:
+	_connect_single_attack_hurtbox(attack_hurtbox)
+	_connect_single_attack_hurtbox(heavy_hurtbox)
+	_connect_single_attack_hurtbox(stomp_hurtbox)
+
+func _connect_single_attack_hurtbox(box: Hurtbox) -> void:
+	if box == null:
+		return
+
+	# Make sure the attack hurtboxes behave like the enemy attack hurtbox:
+	# they damage the player only while monitoring is enabled.
+	if box.area_entered.is_connected(_on_attack_hurtbox_area_entered):
+		box.area_entered.disconnect(_on_attack_hurtbox_area_entered)
+
+	box.area_entered.connect(_on_attack_hurtbox_area_entered)
+
+func _on_attack_hurtbox_area_entered(area: Area2D) -> void:
+	if not attack_can_damage:
+		return
+
+	if attack_has_hit:
+		return
+
+	if area == null:
+		return
+
+	# Same flow as your enemy attack logic:
+	# if the player's hitbox/hurtbox system calls takeDamage through Hurtbox/Hitbox interaction,
+	# enabling the boss attack hurtbox is enough.
+	# This guard prevents multi-hit spam from one swing.
+	attack_has_hit = true
+
+func use_attack_box(box_name: String) -> void:
+	reset_attack_window()
+
+	match box_name:
+		"attack":
+			_active_attack_box = attack_hurtbox
+		"heavy":
+			_active_attack_box = heavy_hurtbox
+		"stomp":
+			_active_attack_box = stomp_hurtbox
+		_:
+			_active_attack_box = null
+
+func begin_attack_window() -> void:
+	attack_can_damage = true
+	attack_has_hit = false
+
+	if _active_attack_box:
+		_active_attack_box.monitoring = true
+
+func end_attack_window() -> void:
+	attack_can_damage = false
+
+	if _active_attack_box:
+		_active_attack_box.monitoring = false
+
+func reset_attack_window() -> void:
+	attack_can_damage = false
+	attack_has_hit = false
+
+	if attack_hurtbox:
+		attack_hurtbox.monitoring = false
+	if heavy_hurtbox:
+		heavy_hurtbox.monitoring = false
+	if stomp_hurtbox:
+		stomp_hurtbox.monitoring = false
+
+	_active_attack_box = null
+
+func should_force_punish(distance_to_player: float) -> bool:
+	if not can_use_attack("punish"):
+		return false
+	if distance_to_player > punish_distance:
+		return false
+	return _player_is_committed()
+
+func should_backstep(distance_to_player: float) -> bool:
+	if not can_use_attack("backstep"):
+		return false
+	if distance_to_player > backstep_trigger_distance:
+		return false
+	return _player_is_committed()
+
+func _player_is_committed() -> bool:
+	if player == null:
+		return false
+
+	var attacking: bool = bool(player.get("is_attacking"))
+	var healing: bool = bool(player.get("is_healing"))
+	var parrying: bool = bool(player.get("is_parrying"))
+	var charging: bool = bool(player.get("is_charging_attack"))
+
+	return attacking or healing or parrying or charging

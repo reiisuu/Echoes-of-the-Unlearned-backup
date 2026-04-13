@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d0bl0bqpptj8m"]
 
-[ext_resource type="Script" uid="uid://b2ufyqbebfxqs" path="res://Enemies/Scripts/enemy.gd" id="1_cm4uo"]
+[ext_resource type="Script" uid="uid://c2s0pwclrteeq" path="res://Enemies/Boss/boss.gd" id="1_cyxhu"]
 [ext_resource type="PackedScene" uid="uid://c7ul6brc6v4ph" path="res://General/Hurtbox/Hurtbox.tscn" id="2_tvwxn"]
 [ext_resource type="PackedScene" uid="uid://bq2crkibfp8jr" path="res://General/Hitbox/Hitbox.tscn" id="3_uo423"]
 [ext_resource type="Texture2D" uid="uid://cf031ebskfnbs" path="res://Enemies/Boss/Air Attack Slam Sprite sheet 246x121.png" id="5_reip0"]
@@ -10,21 +10,31 @@
 [ext_resource type="Script" uid="uid://bj4edvu0nxtas" path="res://Enemies/Scripts/States/enemy_state_wander.gd" id="8_kos7e"]
 [ext_resource type="Script" uid="uid://b05s7hayofix6" path="res://Enemies/Scripts/States/enemy_state_stun.gd" id="9_416bp"]
 [ext_resource type="Script" uid="uid://bc6wcj54klhiq" path="res://Enemies/Scripts/States/enemy_state_destroy.gd" id="10_jtgsl"]
-[ext_resource type="Script" uid="uid://b0iwpvj1x1qdq" path="res://Enemies/Scripts/States/enemy_state_attack.gd" id="11_1mesd"]
-[ext_resource type="Script" uid="uid://d04yfemyf513f" path="res://Enemies/Scripts/States/enemy_state_chase.gd" id="12_hlvqi"]
+[ext_resource type="Script" uid="uid://bdgaanh6cs5vm" path="res://Enemies/Boss/boss_state_attack.gd" id="11_jgng2"]
+[ext_resource type="Script" uid="uid://jf67bqn35dnn" path="res://Enemies/Boss/boss_state_chase.gd" id="12_chase"]
+[ext_resource type="Script" uid="uid://crfc016afeggw" path="res://Enemies/Boss/boss_state_heavy_attack.gd" id="13_5jwwj"]
 [ext_resource type="AudioStream" uid="uid://1blxypkvlcba" path="res://Enemies/hit_01.wav" id="13_855l8"]
-[ext_resource type="Script" uid="uid://b4brsf2ddxh7c" path="res://Enemies/Scripts/States/enemy_state_heavy_attack.gd" id="13_i6b1j"]
 [ext_resource type="AudioStream" uid="uid://dwvv8rtrdg7lc" path="res://Enemies/hit_00.wav" id="14_3mmd4"]
-[ext_resource type="Script" uid="uid://chsakg64t8blt" path="res://Enemies/Scripts/States/enemy_state_stomp.gd" id="14_4htxn"]
-[ext_resource type="Script" uid="uid://cal7j1rrduoq" path="res://Enemies/Scripts/States/enemy_state_phase_transition.gd" id="15_reip0"]
+[ext_resource type="Script" uid="uid://cifsi25umsoqy" path="res://Enemies/Boss/boss_state_stomp.gd" id="14_eooyi"]
+[ext_resource type="Script" uid="uid://dl3p7m1jprv4g" path="res://Enemies/Boss/boss_state_phase_transition.gd" id="15_f4w0s"]
 [ext_resource type="Script" uid="uid://c044tmp8eg1c6" path="res://Enemies/Scripts/States/enemy_state_feint.gd" id="16_cyxhu"]
-[ext_resource type="Script" uid="uid://bdkadcj6waubu" path="res://Enemies/Scripts/States/enemy_state_punish.gd" id="17_cyxhu"]
+[ext_resource type="Script" uid="uid://bv0kq80d47ffr" path="res://Enemies/Boss/boss_state_punish.gd" id="17_x4ppc"]
+[ext_resource type="Script" uid="uid://d2cjtfkvms6r3" path="res://Enemies/Boss/boss_state_backstep.gd" id="18_wlx2k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cyxhu"]
 size = Vector2(37.205, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jgng2"]
 size = Vector2(30.4375, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack_box"]
+size = Vector2(34, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_heavy_box"]
+size = Vector2(46, 56)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_stomp_box"]
+size = Vector2(78, 14)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gum53"]
 atlas = ExtResource("7_f4w0s")
@@ -362,6 +372,86 @@ region = Rect2(1554, 0, 222, 128)
 atlas = ExtResource("7_f4w0s")
 region = Rect2(1776, 0, 222, 128)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_8mdda"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(0, 0, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_skxvq"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(222, 0, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjv00"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(444, 0, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qyy3m"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(666, 0, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2e2rh"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(888, 0, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8h2d"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(1110, 0, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ymw16"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(1332, 0, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2oai"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(1554, 0, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bg56p"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(1776, 0, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fvda2"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(0, 119, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6p5sn"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(222, 119, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eg0w8"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(444, 119, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ari04"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(666, 119, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_18vh4"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(888, 119, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cpn33"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(1110, 119, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_emgdb"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(1332, 119, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6s2ie"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(1554, 119, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ii4ef"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(1776, 119, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ntjh8"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(0, 238, 222, 119)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_krhnl"]
+atlas = ExtResource("7_f4w0s")
+region = Rect2(222, 238, 222, 119)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_2kd4g"]
 atlas = ExtResource("7_f4w0s")
 region = Rect2(0, 1071, 222, 119)
@@ -680,10 +770,70 @@ animations = [{
 "name": &"idle",
 "speed": 13.0
 }, {
-"frames": [],
-"loop": true,
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8mdda")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_skxvq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qjv00")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qyy3m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2e2rh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r8h2d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ymw16")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2oai")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bg56p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fvda2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6p5sn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eg0w8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ari04")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_18vh4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cpn33")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_emgdb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6s2ie")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ii4ef")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ntjh8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_krhnl")
+}],
+"loop": false,
 "name": &"stomp",
-"speed": 5.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -738,9 +888,8 @@ size = Vector2(197, 6)
 [node name="Boss" type="CharacterBody2D" unique_id=439533296]
 collision_layer = 256
 collision_mask = 17
-script = ExtResource("1_cm4uo")
+script = ExtResource("1_cyxhu")
 hp = 10
-max_hp = 10
 
 [node name="Hurtbox" parent="." unique_id=2061963355 instance=ExtResource("2_tvwxn")]
 
@@ -756,10 +905,33 @@ position = Vector2(0, -33)
 shape = SubResource("RectangleShape2D_jgng2")
 debug_color = Color(0.8112211, 0.40642446, 0.15495872, 0.41960785)
 
+[node name="AttackHurtbox" parent="." unique_id=1740011001 instance=ExtResource("2_tvwxn")]
+position = Vector2(12, -32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHurtbox" unique_id=1740011002]
+shape = SubResource("RectangleShape2D_attack_box")
+debug_color = Color(0.8509804, 0.30588236, 0.27058825, 0.41960785)
+
+[node name="HeavyHurtbox" parent="." unique_id=1740011003 instance=ExtResource("2_tvwxn")]
+position = Vector2(18, -34)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HeavyHurtbox" unique_id=1740011004]
+shape = SubResource("RectangleShape2D_heavy_box")
+debug_color = Color(0.9372549, 0.53333336, 0.24313726, 0.41960785)
+
+[node name="StompHurtbox" parent="." unique_id=1740011005 instance=ExtResource("2_tvwxn")]
+position = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StompHurtbox" unique_id=1740011006]
+shape = SubResource("RectangleShape2D_stomp_box")
+debug_color = Color(0.9882353, 0.80784315, 0.24313726, 0.41960785)
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1265562991]
 position = Vector2(0, -54)
 sprite_frames = SubResource("SpriteFrames_vswm2")
-animation = &"idle"
+animation = &"stomp"
+frame = 19
+frame_progress = 1.0
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1815781412]
@@ -787,29 +959,20 @@ next_state = NodePath("../Chase")
 [node name="Destroy" type="Node" parent="EnemyStateMachine" unique_id=370374293]
 script = ExtResource("10_jtgsl")
 
-[node name="Attack" type="Node" parent="EnemyStateMachine" unique_id=1635091310 node_paths=PackedStringArray("return_state")]
-script = ExtResource("11_1mesd")
-return_state = NodePath("../Chase")
+[node name="Attack" type="Node" parent="EnemyStateMachine" unique_id=1635091310]
+script = ExtResource("11_jgng2")
 
-[node name="Chase" type="Node" parent="EnemyStateMachine" unique_id=1444331658 node_paths=PackedStringArray("attack_state", "heavy_attack_state", "stomp_attack_state", "feint_attack_state", "lost_player_state", "phase_transition_state")]
-script = ExtResource("12_hlvqi")
-attack_state = NodePath("../Attack")
-heavy_attack_state = NodePath("../HeavyAttack")
-stomp_attack_state = NodePath("../Stomp")
-feint_attack_state = NodePath("../Attack")
-lost_player_state = NodePath("../Wander")
-phase_transition_state = NodePath("../PhaseTransition")
+[node name="Chase" type="Node" parent="EnemyStateMachine" unique_id=1444331658]
+script = ExtResource("12_chase")
 
-[node name="HeavyAttack" type="Node" parent="EnemyStateMachine" unique_id=2001840562 node_paths=PackedStringArray("return_state")]
-script = ExtResource("13_i6b1j")
-return_state = NodePath("../Chase")
+[node name="HeavyAttack" type="Node" parent="EnemyStateMachine" unique_id=2001840562]
+script = ExtResource("13_5jwwj")
 
-[node name="Stomp" type="Node" parent="EnemyStateMachine" unique_id=1903381556 node_paths=PackedStringArray("return_state")]
-script = ExtResource("14_4htxn")
-return_state = NodePath("../Chase")
+[node name="Stomp" type="Node" parent="EnemyStateMachine" unique_id=1903381556]
+script = ExtResource("14_eooyi")
 
 [node name="PhaseTransition" type="Node" parent="EnemyStateMachine" unique_id=574629946]
-script = ExtResource("15_reip0")
+script = ExtResource("15_f4w0s")
 
 [node name="Feint" type="Node" parent="EnemyStateMachine" unique_id=29949067 node_paths=PackedStringArray("return_state", "punish_attack_state", "heavy_attack_state")]
 script = ExtResource("16_cyxhu")
@@ -817,9 +980,11 @@ return_state = NodePath("../Chase")
 punish_attack_state = NodePath("../Stomp")
 heavy_attack_state = NodePath("../HeavyAttack")
 
-[node name="Punish" type="Node" parent="EnemyStateMachine" unique_id=535611753 node_paths=PackedStringArray("return_state")]
-script = ExtResource("17_cyxhu")
-return_state = NodePath("../Chase")
+[node name="Punish" type="Node" parent="EnemyStateMachine" unique_id=535611753]
+script = ExtResource("17_x4ppc")
+
+[node name="Backstep" type="Node" parent="EnemyStateMachine" unique_id=197526022]
+script = ExtResource("18_wlx2k")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1685979365]
 stream = ExtResource("13_855l8")

@@ -14459,7 +14459,6 @@ scale = Vector2(4, 4)
 hp = 20
 
 [node name="Checkpoint2" type="Area2D" parent="." unique_id=395128256 groups=["player"]]
-visible = false
 position = Vector2(14000, 2395.125)
 scale = Vector2(1.669, 12.6)
 script = ExtResource("38_0fq6c")
