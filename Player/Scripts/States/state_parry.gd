@@ -36,12 +36,14 @@ func process(delta: float) -> State:
 	if not _in_recovery:
 		player.is_parrying = true
 
+		# Successful parry is handled immediately by player.gd now.
 		if player.parry_successful:
 			player.is_parrying = false
 			player.parry_successful = false
-			_in_recovery = true
-			_timer = 0.0
-			return null
+
+			if player.is_on_floor():
+				return idle
+			return fall
 
 		if _timer >= parry_active_time:
 			player.is_parrying = false

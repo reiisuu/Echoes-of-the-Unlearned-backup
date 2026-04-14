@@ -35,6 +35,7 @@ var was_on_floor: bool = false
 @export var dash_cooldown: float = 0.35
 
 var is_parrying: bool = false
+var parry_successful: bool = false
 var parry_window: float = 0.2
 var parry_timer: float = 0.0
 var parry_cooldown: float = 0.5
@@ -179,8 +180,6 @@ func _process(delta: float) -> void:
 		is_parrying = false
 
 func _physics_process(delta: float) -> void:
-	# ALL your movement + velocity logic first
-
 	if dash_cooldown_timer > 0.0:
 		dash_cooldown_timer -= delta
 		if dash_cooldown_timer <= 0.0:
@@ -240,21 +239,17 @@ func setDirection() -> bool:
 func update_effect_directions() -> void:
 	var facing_left := cardinal_direction == Vector2.LEFT
 
-	var offset := 25.0  # adjust per effect
+	var offset := 25.0
 
-	# Light attack
 	if light_attack_effect:
 		light_attack_effect.position.x = -offset if facing_left else offset
 
-	# Dash
 	if dash_effect:
 		dash_effect.position.x = -offset if facing_left else offset
 
-	# Charged attack
 	if charged_attack_effect:
 		charged_attack_effect.position.x = -offset if facing_left else offset
 
-	# Centered effects (no movement)
 	if slam_effect:
 		slam_effect.position.x = 0
 
@@ -465,7 +460,7 @@ func get_slam_damage() -> int:
 func _take_damage(hurtbox: Hurtbox) -> void:
 	if is_parrying:
 		print("PARRY SUCCESS")
-		var attacker := hurtbox.owner
+		var attacker := hurtbox.get_parent()
 		on_successful_parry(attacker)
 		return
 
@@ -507,6 +502,7 @@ func make_invulnerable(_duration: float = 1.0) -> void:
 	hitbox.monitoring = true
 
 func on_successful_parry(attacker: Node) -> void:
+	parry_successful = true
 	is_parrying = false
 	invulnerable = true
 	invuln_timer = parry_iframes_on_success
@@ -515,7 +511,10 @@ func on_successful_parry(attacker: Node) -> void:
 		attacker.on_parried()
 
 	if state_machine.current_state is State_Parry:
-		state_machine.ChangeState($StateMachine/Idle)
+		if is_on_floor():
+			state_machine.ChangeState($StateMachine/Idle)
+		else:
+			state_machine.ChangeState($StateMachine/Fall)
 
 func play_effect(effect_name: String, _centered: bool = false) -> void:
 	match effect_name:
@@ -573,10 +572,6 @@ func _on_effect_animation_finished() -> void:
 func set_checkpoint(pos: Vector2):
 	checkpoint_position = pos
 	print("New checkpoint set: ", pos)
-
-# =========================
-# PLAYER BEHAVIOR HELPERS
-# =========================
 
 func register_behavior_attack() -> void:
 	if behavior_logger:
