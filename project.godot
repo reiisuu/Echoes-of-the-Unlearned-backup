@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="test-2"
+config/name="backup"
 run/main_scene="uid://bpjtpm7gfhh2k"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
