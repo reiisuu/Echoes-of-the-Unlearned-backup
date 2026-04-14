@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://bahaog107k7ok" path="res://PlatformLayout/Sprites/Layer_0000_9.png" id="8_u1pgp"]
 [ext_resource type="PackedScene" uid="uid://b272lb2i428oc" path="res://pause_menu.tscn" id="16_417ge"]
 [ext_resource type="PackedScene" uid="uid://crrudbbb60pdp" path="res://00_Globals/player_hud/player_hud.tscn" id="17_vfwod"]
+[ext_resource type="PackedScene" uid="uid://c3geqknt11du3" path="res://00_Globals/heal_hud.tscn" id="18_di5qy"]
+[ext_resource type="PackedScene" uid="uid://c7q1cnat0x4hd" path="res://skill_button.tscn" id="18_igsrk"]
 [ext_resource type="PackedScene" uid="uid://doqyafro12baa" path="res://Enemies/Slime/slime.tscn" id="31_qhf2m"]
 [ext_resource type="PackedScene" uid="uid://ceynqc87cwc6p" path="res://Enemies/Monster1/monster1.tscn" id="32_qdb0v"]
 [ext_resource type="PackedScene" uid="uid://bnnhpn75uas51" path="res://Enemies/Skeleton/Skeleton.tscn" id="33_36txy"]
@@ -3829,11 +3831,16 @@ position = Vector2(26.509033, -276.38986)
 scale = Vector2(19.71712, 21.468279)
 shape = SubResource("RectangleShape2D_tqtwb")
 
+[node name="PlayerHud" parent="." unique_id=1758150444 instance=ExtResource("17_vfwod")]
+
+[node name="Enrage_hud" parent="." unique_id=300195571 instance=ExtResource("18_igsrk")]
+
+[node name="heal_hud" parent="." unique_id=372181214 instance=ExtResource("18_di5qy")]
+
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1575777801]
+layer = 10
 
 [node name="pause_menu" parent="CanvasLayer" unique_id=1091801763 instance=ExtResource("16_417ge")]
-
-[node name="PlayerHud" parent="." unique_id=1758150444 instance=ExtResource("17_vfwod")]
 
 [connection signal="body_entered" from="Checkpoint" to="Checkpoint" method="_on_body_entered"]
 [connection signal="body_entered" from="Barrier1" to="Barrier1" method="_on_body_entered"]

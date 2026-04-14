@@ -38,6 +38,8 @@
 [ext_resource type="Script" uid="uid://dn1ixbbrvarml" path="res://checkpoint.gd" id="38_0fq6c"]
 [ext_resource type="PackedScene" uid="uid://crrudbbb60pdp" path="res://00_Globals/player_hud/player_hud.tscn" id="38_xqlue"]
 [ext_resource type="Texture2D" uid="uid://cw5rya4we7xg" path="res://PlatformLayout/Sprites/Green Portal Sprite Sheet.png" id="39_4xhwf"]
+[ext_resource type="PackedScene" uid="uid://c7q1cnat0x4hd" path="res://skill_button.tscn" id="39_atwxa"]
+[ext_resource type="PackedScene" uid="uid://c3geqknt11du3" path="res://00_Globals/heal_hud.tscn" id="39_qal23"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nm4jr"]
 texture = ExtResource("3_tltvn")
@@ -14494,11 +14496,16 @@ position = Vector2(26.508892, -169.13678)
 scale = Vector2(19.71712, 21.468279)
 shape = SubResource("RectangleShape2D_f53w2")
 
+[node name="PlayerHud" parent="." unique_id=1758150444 instance=ExtResource("38_xqlue")]
+
+[node name="Enrage_hud" parent="." unique_id=300195571 instance=ExtResource("39_atwxa")]
+
+[node name="heal_hud" parent="." unique_id=60170747 instance=ExtResource("39_qal23")]
+
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1279465938]
+layer = 10
 
 [node name="pause_menu" parent="CanvasLayer" unique_id=1091801763 instance=ExtResource("37_f53w2")]
-
-[node name="PlayerHud" parent="." unique_id=1758150444 instance=ExtResource("38_xqlue")]
 
 [connection signal="body_entered" from="Checkpoint2" to="Checkpoint2" method="_on_body_entered"]
 [connection signal="body_entered" from="Portal" to="Portal" method="_on_body_entered"]

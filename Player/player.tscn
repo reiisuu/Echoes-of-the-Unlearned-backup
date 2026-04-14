@@ -918,10 +918,9 @@ _data = {
 &"default": SubResource("Animation_dkpta")
 }
 
-[node name="Player" type="CharacterBody2D" unique_id=3606872]
+[node name="Player" type="CharacterBody2D" unique_id=3606872 groups=["Player"]]
 collision_mask = 16
 script = ExtResource("1_4ntmi")
-invulnerable = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2070372597]
 position = Vector2(0, -4.61)

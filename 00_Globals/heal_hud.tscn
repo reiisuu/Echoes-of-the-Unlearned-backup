@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://c3geqknt11du3"]
+
+[ext_resource type="Texture2D" uid="uid://dfof5y8l6fwyf" path="res://00_Globals/playerskill_hud/skill_icons36.png" id="1_3rq8j"]
+[ext_resource type="Script" uid="uid://ckut3tnv7xict" path="res://heal.gd" id="2_hrpav"]
+
+[sub_resource type="Gradient" id="Gradient_bol07"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0.58431375)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6oka4"]
+gradient = SubResource("Gradient_bol07")
+fill = 2
+
+[node name="heal_hud" type="CanvasLayer" unique_id=300195571]
+
+[node name="Control" type="Control" parent="." unique_id=885117377]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+mouse_filter = 1
+
+[node name="heal" type="TextureButton" parent="Control" unique_id=992908088]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 570.0
+offset_right = 96.0
+offset_bottom = 602.0
+mouse_filter = 1
+accessibility_name = "Enrage"
+texture_normal = ExtResource("1_3rq8j")
+stretch_mode = 0
+script = ExtResource("2_hrpav")
+
+[node name="Timer" type="Timer" parent="Control/heal" unique_id=106492345]
+wait_time = 15.0
+autostart = true
+
+[node name="CooldownSweep" type="TextureProgressBar" parent="Control/heal" unique_id=186681586]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.105
+offset_top = 0.14
+offset_right = 32.105003
+offset_bottom = 32.14
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+mouse_filter = 2
+max_value = 5.0
+step = 0.05
+fill_mode = 5
+texture_progress = SubResource("GradientTexture2D_6oka4")
+tint_progress = Color(0, 0, 0, 0.5882353)
+
+[node name="Label" type="Label" parent="Control/heal" unique_id=1413015668]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -32.0
+offset_right = 16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 9
+text = "R"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="HotkeyLabel" type="Label" parent="Control/heal" unique_id=262160625]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -32.0
+offset_right = 32.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 10
+text = " R"
+
+[connection signal="pressed" from="Control/heal" to="Control/heal" method="_on_pressed"]
+[connection signal="timeout" from="Control/heal/Timer" to="Control/heal" method="_on_timer_timeout"]
