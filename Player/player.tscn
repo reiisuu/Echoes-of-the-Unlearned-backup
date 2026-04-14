@@ -758,45 +758,45 @@ region = Rect2(384, 256, 128, 128)
 [sub_resource type="SpriteFrames" id="SpriteFrames_get7g"]
 animations = [{
 "frames": [{
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_w5pua")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ca054")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_6xaqw")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_skhd2")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ppx2g")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_0f4m7")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_c7st8")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_i8h25")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_2krxc")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_mw2es")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_p7odc")
 }, {
-"duration": 0.4,
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_beqdq")
 }],
-"loop": true,
+"loop": false,
 "name": &"heal",
-"speed": 5.0
+"speed": 15.0
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_get7g"]
@@ -969,7 +969,8 @@ position = Vector2(-3.0517578e-05, 16.279053)
 scale = Vector2(2.68, 2.68)
 sprite_frames = SubResource("SpriteFrames_get7g")
 animation = &"heal"
-frame_progress = 0.65706116
+frame = 11
+frame_progress = 1.0
 
 [node name="ChargedAttackEffect" type="AnimatedSprite2D" parent="AnimatedSprite2D" unique_id=444490567]
 visible = false

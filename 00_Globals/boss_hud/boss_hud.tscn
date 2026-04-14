@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dehulnnqgv6uu"]
 
 [ext_resource type="Script" uid="uid://ctjntdawk1w1n" path="res://00_Globals/boss_hud/progress_bar.gd" id="1_1n25l"]
+[ext_resource type="Script" uid="uid://0e5121oqyoje" path="res://00_Globals/boss_hud/boss_hud.gd" id="1_pre65"]
 [ext_resource type="FontFile" uid="uid://dkaxf4533vgh0" path="res://Fonts/ARCADECLASSIC.TTF" id="2_rbej7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tj37y"]
@@ -43,6 +44,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [node name="boss_hud" type="CanvasLayer" unique_id=1979424197]
+script = ExtResource("1_pre65")
 
 [node name="ProgressBar" type="ProgressBar" parent="." unique_id=2105233020]
 offset_left = 345.0
