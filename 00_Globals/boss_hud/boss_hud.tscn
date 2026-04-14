@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://dehulnnqgv6uu"]
+
+[ext_resource type="Script" uid="uid://ctjntdawk1w1n" path="res://00_Globals/boss_hud/progress_bar.gd" id="1_1n25l"]
+[ext_resource type="FontFile" uid="uid://dkaxf4533vgh0" path="res://Fonts/ARCADECLASSIC.TTF" id="2_rbej7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tj37y"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1n25l"]
+bg_color = Color(0.8244208, 0.1944615, 0.18956661, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rbej7"]
+bg_color = Color(0.4045111, 0.40451115, 0.4045111, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pre65"]
+bg_color = Color(0.9898004, 0.8179534, 0.47094035, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="boss_hud" type="CanvasLayer" unique_id=1979424197]
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=2105233020]
+offset_left = 345.0
+offset_top = 48.0
+offset_right = 876.0
+offset_bottom = 63.0
+theme_override_styles/background = SubResource("StyleBoxFlat_tj37y")
+theme_override_styles/fill = SubResource("StyleBoxFlat_1n25l")
+value = 100.0
+show_percentage = false
+script = ExtResource("1_1n25l")
+
+[node name="ProgressBar2" type="ProgressBar" parent="ProgressBar" unique_id=1092517554]
+show_behind_parent = true
+layout_mode = 0
+offset_right = 531.0
+offset_bottom = 15.0
+theme_override_styles/background = SubResource("StyleBoxFlat_rbej7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_pre65")
+value = 100.0
+show_percentage = false
+
+[node name="Timer" type="Timer" parent="ProgressBar" unique_id=288801912]
+wait_time = 0.2
+one_shot = true
+
+[node name="Label" type="Label" parent="." unique_id=1071307735]
+texture_filter = 1
+offset_left = 587.0
+offset_top = 67.0
+offset_right = 639.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_rbej7")
+theme_override_font_sizes/font_size = 22
+text = "Echo"
+
+[connection signal="timeout" from="ProgressBar/Timer" to="ProgressBar" method="_on_timer_timeout"]

@@ -25,16 +25,16 @@
 size = Vector2(37.205, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jgng2"]
-size = Vector2(30.4375, 64)
+size = Vector2(21.963, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_attack_box"]
 size = Vector2(43.875, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_heavy_box"]
-size = Vector2(74.545, 56)
+size = Vector2(74.12, 56)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_stomp_box"]
-size = Vector2(78, 14)
+size = Vector2(116.04, 51.96)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gum53"]
 atlas = ExtResource("7_f4w0s")
