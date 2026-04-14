@@ -12,7 +12,11 @@ func _ready():
 	options.visible = false
 
 func _on_start_pressed() -> void:
+
+	get_tree().change_scene_to_file("res://scene2.tscn")
+
 	get_tree().change_scene_to_file("res://scene3.tscn")
+
 
 
 

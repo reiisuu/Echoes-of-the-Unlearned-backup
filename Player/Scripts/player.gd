@@ -615,4 +615,17 @@ func register_behavior_slam_attack() -> void:
 		behavior_logger.register_slam_attack()
 
 func die():
-	global_position = checkpoint_position
+	LivesManager.current_lives -= 1
+	
+	if LivesManager.current_lives <= 0:
+		LivesManager.reset_game_state()
+	else:
+		# INSTANT RESPAWN LOGIC
+		print("Respawning instantly...")
+		global_position = checkpoint_position # Teleport to checkpoint
+		hp = maxHp                            # Refill health
+		update_hp(0)                          # Refresh the HUD
+		
+		# If you use a State Machine, make sure to set it back to Idle
+		if state_machine:
+			state_machine.ChangeState($StateMachine/Idle)

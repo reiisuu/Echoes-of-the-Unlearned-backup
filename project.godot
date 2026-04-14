@@ -10,6 +10,8 @@ config_version=5
 
 [application]
 
+
+config/name="test-2"
 config/name="private"
 run/main_scene="uid://bpjtpm7gfhh2k"
 config/features=PackedStringArray("4.6", "Forward Plus")
@@ -25,6 +27,7 @@ buses/default_bus_layout="uid://bw3wafdrhwdx5"
 LevelManager="*uid://bd46ns7nxwjbv"
 PlayerManager="*uid://bqcbhkijomrbw"
 Transition="*uid://b38tn7r5r1s88"
+LivesManager="*uid://cfjoh2wobmyot"
 
 [display]
 

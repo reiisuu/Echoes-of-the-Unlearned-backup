@@ -14513,7 +14513,7 @@ position = Vector2(0, 1.587565)
 scale = Vector2(1.4820837, 0.9320124)
 
 [node name="Barrier1" type="Area2D" parent="." unique_id=32414116 groups=["player"]]
-position = Vector2(1125, -105)
+position = Vector2(825, -84)
 collision_mask = 3
 script = ExtResource("40_dph4e")
 
