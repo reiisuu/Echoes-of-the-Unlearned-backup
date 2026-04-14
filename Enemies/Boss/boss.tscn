@@ -20,6 +20,9 @@
 [ext_resource type="Script" uid="uid://c044tmp8eg1c6" path="res://Enemies/Scripts/States/enemy_state_feint.gd" id="16_cyxhu"]
 [ext_resource type="Script" uid="uid://bv0kq80d47ffr" path="res://Enemies/Boss/boss_state_punish.gd" id="17_x4ppc"]
 [ext_resource type="Script" uid="uid://d2cjtfkvms6r3" path="res://Enemies/Boss/boss_state_backstep.gd" id="18_wlx2k"]
+[ext_resource type="Script" uid="uid://dbih8ofa5bk5a" path="res://Enemies/Boss/boss_ai_context.gd" id="21_f4w0s"]
+[ext_resource type="Script" uid="uid://ccapj06bmoute" path="res://Enemies/Boss/boss_api_client.gd" id="22_x4ppc"]
+[ext_resource type="Script" uid="uid://bcdqgxjup84yt" path="res://Enemies/Boss/boss_decision_brain.gd" id="23_wlx2k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cyxhu"]
 size = Vector2(37.205, 64)
@@ -997,3 +1000,12 @@ stream = ExtResource("14_3mmd4")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetector" unique_id=594009480]
 position = Vector2(15.5, -3)
 shape = SubResource("RectangleShape2D_m8qt6")
+
+[node name="BossAIContext" type="Node" parent="." unique_id=678930759]
+script = ExtResource("21_f4w0s")
+
+[node name="BossAPIClient" type="Node" parent="." unique_id=1450171958]
+script = ExtResource("22_x4ppc")
+
+[node name="BossDecisionBrain" type="Node" parent="." unique_id=391859359]
+script = ExtResource("23_wlx2k")

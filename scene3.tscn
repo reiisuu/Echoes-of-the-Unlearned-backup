@@ -35,7 +35,7 @@
 [ext_resource type="PackedScene" uid="uid://c7q1cnat0x4hd" path="res://skill_button.tscn" id="36_2h5c2"]
 [ext_resource type="PackedScene" uid="uid://crrudbbb60pdp" path="res://00_Globals/player_hud/player_hud.tscn" id="36_30hra"]
 [ext_resource type="PackedScene" uid="uid://d0bl0bqpptj8m" path="res://Enemies/Boss/boss.tscn" id="37_apwgh"]
-[ext_resource type="Script" uid="uid://hf72new3qhw5" path="res://barrier_3.gd" id="37_ick5v"]
+[ext_resource type="Script" path="res://barrier_3.gd" id="37_ick5v"]
 [ext_resource type="PackedScene" uid="uid://c3geqknt11du3" path="res://00_Globals/heal_hud.tscn" id="37_w5q1n"]
 [ext_resource type="Script" uid="uid://dn1ixbbrvarml" path="res://checkpoint.gd" id="38_pncca"]
 [ext_resource type="Texture2D" uid="uid://cw5rya4we7xg" path="res://PlatformLayout/Sprites/Green Portal Sprite Sheet.png" id="39_w2war"]
@@ -14520,7 +14520,7 @@ position = Vector2(0, 1.587565)
 scale = Vector2(1.4820837, 0.9320124)
 
 [node name="Barrier1" type="Area2D" parent="." unique_id=32414116 groups=["player"]]
-position = Vector2(1125, -105)
+position = Vector2(825, -84)
 collision_mask = 3
 script = ExtResource("40_dph4e")
 

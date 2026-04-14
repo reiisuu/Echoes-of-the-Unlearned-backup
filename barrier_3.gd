@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var boss_path: NodePath   # 👈 drag your boss here
+@export var boss_path: NodePath
 
 @onready var walls = []
 
@@ -14,18 +14,15 @@ var boss = null
 func _ready() -> void:
 	print("READY RUNNING")
 	
-	# find walls automatically
 	walls = find_children("Wall*", "", true)
 	print("WALLS FOUND:", walls)
 
 	set_walls(false)
 
-	# get boss reference
 	boss = get_node_or_null(boss_path)
 	if boss == null:
 		print("❌ NO BOSS ASSIGNED")
 
-	# connect trigger
 	if not body_entered.is_connected(_on_body_entered):
 		body_entered.connect(_on_body_entered)
 
@@ -33,6 +30,19 @@ func _ready() -> void:
 	can_trigger = true
 
 	print("READY DONE")
+
+
+func _process(_delta: float) -> void:
+	if not active:
+		return
+
+	var player = PlayerManager.player
+	if player == null:
+		return
+
+	if player.state_machine != null and player.state_machine.current_state is State_Death:
+		print("PLAYER DIED -> RESET BOSS BARRIER")
+		_reset_on_player_death()
 
 
 func _on_body_entered(body) -> void:
@@ -60,7 +70,6 @@ func start_encounter() -> void:
 		finished = true
 		return
 
-	# connect boss death signal
 	if boss.has_signal("enemyDestroyed"):
 		if not boss.enemyDestroyed.is_connected(_on_boss_killed):
 			boss.enemyDestroyed.connect(_on_boss_killed)
@@ -68,7 +77,6 @@ func start_encounter() -> void:
 	else:
 		print("❌ BOSS HAS NO SIGNAL")
 
-	# activate barrier
 	set_walls(true)
 	active = true
 
@@ -89,6 +97,23 @@ func end_encounter() -> void:
 	print("BARRIER OFF")
 
 	monitoring = false
+
+
+func _reset_on_player_death() -> void:
+	if not active:
+		return
+
+	set_walls(false)
+	active = false
+	finished = false
+	can_trigger = false
+
+	call_deferred("_reenable_trigger_after_death")
+
+
+func _reenable_trigger_after_death() -> void:
+	await get_tree().physics_frame
+	can_trigger = true
 
 
 func set_walls(state: bool) -> void:
