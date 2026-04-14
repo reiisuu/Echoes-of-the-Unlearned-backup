@@ -35771,6 +35771,33 @@ y_sort_enabled = true
 [node name="Player" parent="." unique_id=1872429895 groups=["player"] instance=ExtResource("1_7d0jp")]
 z_index = 1
 position = Vector2(-751.55, 201.525)
+move_speed = null
+run_speed_multiplier = null
+ground_acceleration = null
+ground_deceleration = null
+air_acceleration = null
+jump_velocity = null
+gravity = null
+fall_gravity = null
+max_fall_speed = null
+jump_cut_multiplier = null
+coyote_time = null
+jump_buffer_time = null
+max_jumps = null
+dash_speed = null
+dash_time = null
+dash_cooldown = null
+slam_speed = null
+slam_damage = null
+heal_amount = null
+heal_cooldown = null
+charged_attack_damage = null
+charged_attack_cooldown = null
+enrage_duration = null
+enrage_damage_multiplier = null
+enrage_modulate = null
+enrage_cooldown = null
+invulnerable = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1835033426]
 position = Vector2(845.145, 74.94)
@@ -35778,7 +35805,7 @@ scale = Vector2(2.175, 2.175)
 sprite_frames = SubResource("SpriteFrames_eakjk")
 animation = &"w"
 autoplay = "w"
-frame_progress = 0.17200387
+frame_progress = 0.8748097
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="." unique_id=1143997489]
 position = Vector2(-390.74005, 175.94002)
@@ -35786,7 +35813,7 @@ scale = Vector2(2.175, 2.175)
 sprite_frames = SubResource("SpriteFrames_eakjk")
 animation = &"a"
 autoplay = "a"
-frame_progress = 0.6177659
+frame_progress = 0.32057208
 
 [node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="." unique_id=1266109728]
 position = Vector2(-294.74002, 175.94)
@@ -35794,7 +35821,7 @@ scale = Vector2(2.175, 2.175)
 sprite_frames = SubResource("SpriteFrames_eakjk")
 animation = &"d"
 autoplay = "d"
-frame_progress = 0.022975719
+frame_progress = 0.72578293
 
 [node name="Label" type="Label" parent="AnimatedSprite2D3" unique_id=1389806397]
 texture_filter = 1
@@ -35911,7 +35938,8 @@ position = Vector2(1969.2601, 90.94001)
 scale = Vector2(2.175, 2.175)
 sprite_frames = SubResource("SpriteFrames_eakjk")
 animation = &"control"
-autoplay = "default"
+autoplay = "control"
+frame_progress = 0.90468544
 
 [node name="AnimatedSprite2D5" type="AnimatedSprite2D" parent="." unique_id=1874085970]
 position = Vector2(1521.26, 74.94)
@@ -35919,7 +35947,7 @@ scale = Vector2(2.175, 2.175)
 sprite_frames = SubResource("SpriteFrames_eakjk")
 animation = &"s"
 autoplay = "s"
-frame_progress = 0.2419485
+frame_progress = 0.94475496
 
 [node name="AnimatedSprite2D6" type="AnimatedSprite2D" parent="." unique_id=1838229368]
 position = Vector2(2009.2601, -117.06001)
@@ -35927,7 +35955,7 @@ scale = Vector2(2.175, 2.175)
 sprite_frames = SubResource("SpriteFrames_eakjk")
 animation = &"x"
 autoplay = "x"
-frame_progress = 0.45126888
+frame_progress = 0.15407316
 
 [node name="AnimatedSprite2D8" type="AnimatedSprite2D" parent="." unique_id=334513515]
 position = Vector2(2812.05, -405.25)
@@ -35935,7 +35963,7 @@ scale = Vector2(2.175, 2.175)
 sprite_frames = SubResource("SpriteFrames_eakjk")
 animation = &"r"
 autoplay = "r"
-frame_progress = 0.046293113
+frame_progress = 0.7491007
 
 [node name="AnimatedSprite2D7" type="AnimatedSprite2D" parent="." unique_id=1345492614]
 position = Vector2(3305.2603, -437.06)
@@ -35943,7 +35971,7 @@ scale = Vector2(2.175, 2.175)
 sprite_frames = SubResource("SpriteFrames_eakjk")
 animation = &"shift"
 autoplay = "shift"
-frame_progress = 0.7640042
+frame_progress = 0.466811
 
 [node name="Levbuild" parent="." unique_id=1822750636 instance=ExtResource("2_drnmg")]
 collision_visibility_mode = 1
