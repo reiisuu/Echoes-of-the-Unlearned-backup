@@ -31,11 +31,11 @@
 [ext_resource type="Texture2D" uid="uid://c3acit3up62iv" path="res://PlatformLayout/Sprites/DownLayer.png" id="29_n202p"]
 [ext_resource type="Texture2D" uid="uid://dhe35wsjbc4jc" path="res://PlatformLayout/Sprites/MiddleLayer.png" id="30_lnh1w"]
 [ext_resource type="PackedScene" uid="uid://b272lb2i428oc" path="res://pause_menu.tscn" id="35_miu4f"]
-[ext_resource type="PackedScene" uid="uid://c7q1cnat0x4hd" path="res://skill_button.tscn" id="36_2h5c2"]
+[ext_resource type="PackedScene" path="res://skill_button.tscn" id="36_2h5c2"]
 [ext_resource type="PackedScene" uid="uid://crrudbbb60pdp" path="res://00_Globals/player_hud/player_hud.tscn" id="36_30hra"]
 [ext_resource type="PackedScene" uid="uid://d0bl0bqpptj8m" path="res://Enemies/Boss/boss.tscn" id="37_apwgh"]
 [ext_resource type="Script" uid="uid://hf72new3qhw5" path="res://barrier_3.gd" id="37_ick5v"]
-[ext_resource type="PackedScene" uid="uid://c3geqknt11du3" path="res://00_Globals/heal_hud.tscn" id="37_w5q1n"]
+[ext_resource type="PackedScene" path="res://00_Globals/heal_hud.tscn" id="37_w5q1n"]
 [ext_resource type="Script" uid="uid://dn1ixbbrvarml" path="res://checkpoint.gd" id="38_pncca"]
 [ext_resource type="Texture2D" uid="uid://cw5rya4we7xg" path="res://PlatformLayout/Sprites/Green Portal Sprite Sheet.png" id="39_w2war"]
 [ext_resource type="Script" uid="uid://dlcsgyoxdl2fs" path="res://barrier_1.gd" id="40_dph4e"]
@@ -14357,7 +14357,84 @@ size = Vector2(6342, 720)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2h5c2"]
 size = Vector2(272.2965, 7037.2)
 
-[node name="Playground2" type="Node2D" unique_id=1525192332]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_03rww"]
+size = Vector2(133.09412, 25.913998)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_of8r6"]
+atlas = ExtResource("39_w2war")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_26qev"]
+atlas = ExtResource("39_w2war")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x6owr"]
+atlas = ExtResource("39_w2war")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_njc40"]
+atlas = ExtResource("39_w2war")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cmcla"]
+atlas = ExtResource("39_w2war")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b7n8b"]
+atlas = ExtResource("39_w2war")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nnaor"]
+atlas = ExtResource("39_w2war")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ut5q4"]
+atlas = ExtResource("39_w2war")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lboej"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_of8r6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_26qev")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x6owr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_njc40")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cmcla")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b7n8b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nnaor")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ut5q4")
+}],
+"loop": true,
+"name": &"Checkpoint",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"new_animation_1",
+"speed": 5.0
+}]
+
+[node name="Playground3" type="Node2D" unique_id=1525192332]
 y_sort_enabled = true
 
 [node name="Player" parent="." unique_id=1872429895 groups=["player"] instance=ExtResource("1_j26qc")]
@@ -14457,6 +14534,7 @@ script = ExtResource("37_ick5v")
 boss_path = NodePath("../Boss")
 
 [node name="Area2D2" type="CollisionShape2D" parent="Barrier3" unique_id=1770860981 groups=["player"]]
+visible = false
 position = Vector2(110, -580)
 shape = SubResource("RectangleShape2D_w5q1n")
 
@@ -14484,6 +14562,30 @@ layer = 10
 
 [node name="pause_menu" parent="CanvasLayer" unique_id=1091801763 instance=ExtResource("35_miu4f")]
 
+[node name="Checkpoint" type="Area2D" parent="." unique_id=270874863 groups=["player"]]
+position = Vector2(15259, 2449)
+scale = Vector2(0.5838542, 4.4092693)
+script = ExtResource("38_pncca")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoint" unique_id=1515963741]
+position = Vector2(8.392334e-05, 1.3607678)
+rotation = -3.1415925
+scale = Vector2(-0.3054822, -0.63291526)
+shape = SubResource("RectangleShape2D_03rww")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Checkpoint" unique_id=96944198]
+position = Vector2(0, -2.0411549)
+scale = Vector2(3.2814636, 0.31162542)
+sprite_frames = SubResource("SpriteFrames_lboej")
+animation = &"Checkpoint"
+autoplay = "Checkpoint"
+speed_scale = 1.5
+
+[node name="Marker2D" type="Marker2D" parent="Checkpoint" unique_id=882841874]
+position = Vector2(0, 3.5762787e-07)
+scale = Vector2(1.4820837, 0.9320124)
+
 [connection signal="body_entered" from="Checkpoint2" to="Checkpoint2" method="_on_body_entered"]
 [connection signal="body_entered" from="Barrier1" to="Barrier1" method="_on_body_entered"]
 [connection signal="body_entered" from="Barrier3" to="Barrier3" method="_on_body_entered"]
+[connection signal="body_entered" from="Checkpoint" to="Checkpoint" method="_on_body_entered"]
