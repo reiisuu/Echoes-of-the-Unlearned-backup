@@ -3726,7 +3726,7 @@ y_sort_enabled = true
 
 [node name="Player" parent="." unique_id=1872429895 groups=["player"] instance=ExtResource("1_7d0jp")]
 z_index = 1
-position = Vector2(3242, -423)
+position = Vector2(-749, -157)
 
 [node name="Levbuild" parent="." unique_id=1822750636 instance=ExtResource("2_drnmg")]
 collision_visibility_mode = 1
