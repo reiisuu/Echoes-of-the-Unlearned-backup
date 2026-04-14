@@ -8,7 +8,6 @@ var cardinal_direction: Vector2 = Vector2.RIGHT
 var direction: Vector2 = Vector2.ZERO
 var isRunning: bool = false
 
-
 @onready var behavior_logger: PlayerBehaviorLogger = $PlayerBehaviorLogger
 
 @export var move_speed: float = 300.0
@@ -95,7 +94,7 @@ var normal_modulate: Color = Color(1, 1, 1, 1)
 @onready var heal_timer: Timer = $HealTimer
 @onready var charged_attack_timer: Timer = $ChargedAttackTimer
 
-@onready var hud = get_tree().get_first_node_in_group("player_hud")
+var hud = null
 
 @export var invulnerable: bool = false
 var hp: int = 12
@@ -144,10 +143,45 @@ func _ready() -> void:
 
 	jumps_left = max_jumps
 	was_on_floor = is_on_floor()
+
+	_resolve_hud()
 	update_hp(99)
-	if hud and hud.has_method("update_health_bar"):
-		hud.update_health_bar(hp, maxHp)
 	call_deferred("refresh_hud")
+
+func _resolve_hud() -> Node:
+	if is_instance_valid(hud):
+		return hud
+
+	# 1) Prefer the correct group target
+	for node in get_tree().get_nodes_in_group("player_hud"):
+		if node != null and node.get_script() != null:
+			var script_path := ""
+			if node.get_script().resource_path != null:
+				script_path = node.get_script().resource_path
+			if script_path.ends_with("player_hud.gd"):
+				hud = node
+				return hud
+
+	# 2) Fallback by scene search for a node named PlayerHud
+	var current_scene := get_tree().current_scene
+	if current_scene:
+		var by_name = current_scene.find_child("PlayerHud", true, false)
+		if by_name:
+			hud = by_name
+			return hud
+
+	# 3) Fallback by exact HP bar path used by your PlayerHud
+	if current_scene:
+		var hp_owner = current_scene.find_child("HPMarginContainer", true, false)
+		if hp_owner:
+			var canvas : Node = hp_owner
+			while canvas != null and not (canvas is CanvasLayer):
+				canvas = canvas.get_parent()
+			if canvas != null:
+				hud = canvas
+				return hud
+
+	return null
 
 func _process(delta: float) -> void:
 	input_x = Input.get_axis("left", "right")
@@ -155,7 +189,7 @@ func _process(delta: float) -> void:
 	setDirection()
 	
 	if Input.is_action_just_pressed("ui_accept"): # Enter key by default
-		die()  
+		die()
 
 	if Input.is_action_just_pressed("jump"):
 		jump_buffer_timer = jump_buffer_time
@@ -479,18 +513,22 @@ func _take_damage(hurtbox: Hurtbox) -> void:
 func update_hp(delta: int) -> void:
 	hp = clampi(hp + delta, 0, maxHp)
 
-	if hud == null:
-		hud = get_tree().get_first_node_in_group("player_hud")
+	_resolve_hud()
 
 	if hud and hud.has_method("update_health_bar"):
 		hud.update_health_bar(hp, maxHp)
+		print("PLAYER HUD UPDATED:", hp, "/", maxHp)
+	else:
+		print("PLAYER HUD NOT FOUND")
 
 func refresh_hud() -> void:
-	if hud == null:
-		hud = get_tree().get_first_node_in_group("player_hud")
+	_resolve_hud()
 
 	if hud and hud.has_method("update_health_bar"):
 		hud.update_health_bar(hp, maxHp)
+		print("PLAYER HUD REFRESHED:", hp, "/", maxHp)
+	else:
+		print("PLAYER HUD NOT FOUND ON REFRESH")
 
 func make_invulnerable(_duration: float = 1.0) -> void:
 	invulnerable = true
@@ -629,12 +667,10 @@ func _on_main_menubtn_pressed() -> void:
 	if LivesManager.current_lives <= 0:
 		LivesManager.reset_game_state()
 	else:
-		# INSTANT RESPAWN LOGIC
 		print("Respawning instantly...")
-		global_position = checkpoint_position # Teleport to checkpoint
-		hp = maxHp                            # Refill health
-		update_hp(0)                          # Refresh the HUD
-		
-		# If you use a State Machine, make sure to set it back to Idle
+		global_position = checkpoint_position
+		hp = maxHp
+		update_hp(0)
+
 		if state_machine:
 			state_machine.ChangeState($StateMachine/Idle)

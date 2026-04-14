@@ -43,7 +43,7 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="boss_hud" type="CanvasLayer" unique_id=1979424197]
+[node name="boss_hud" type="CanvasLayer" unique_id=1979424197 groups=["boss_hud"]]
 script = ExtResource("1_pre65")
 
 [node name="ProgressBar" type="ProgressBar" parent="." unique_id=2105233020]

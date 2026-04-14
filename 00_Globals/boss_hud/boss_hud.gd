@@ -5,7 +5,7 @@ extends CanvasLayer
 @onready var lives_label: Label = $Label
 
 func _ready() -> void:
-	add_to_group("boss_hud")
+	add_to_group("boss_hud")  # 🔥 FIX HERE
 
 	if hp_bar:
 		hp_bar.min_value = 0

@@ -928,6 +928,33 @@ _data = {
 [node name="Player" type="CharacterBody2D" unique_id=3606872 groups=["Player"]]
 collision_mask = 16
 script = ExtResource("1_4ntmi")
+move_speed = null
+run_speed_multiplier = null
+ground_acceleration = null
+ground_deceleration = null
+air_acceleration = null
+jump_velocity = null
+gravity = null
+fall_gravity = null
+max_fall_speed = null
+jump_cut_multiplier = null
+coyote_time = null
+jump_buffer_time = null
+max_jumps = null
+dash_speed = null
+dash_time = null
+dash_cooldown = null
+slam_speed = null
+slam_damage = null
+heal_amount = null
+heal_cooldown = null
+charged_attack_damage = null
+charged_attack_cooldown = null
+enrage_duration = null
+enrage_damage_multiplier = null
+enrage_modulate = null
+enrage_cooldown = null
+invulnerable = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2070372597]
 position = Vector2(0, -4.61)
