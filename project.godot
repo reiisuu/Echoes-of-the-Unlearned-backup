@@ -12,10 +12,8 @@ config_version=5
 
 
 config/name="test-2"
-<<<<<<< HEAD
-=======
+
 config/name="private"
->>>>>>> 299d4574adb05b9a28b8447d25eac9a6f9aa2a6a
 run/main_scene="uid://bpjtpm7gfhh2k"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
