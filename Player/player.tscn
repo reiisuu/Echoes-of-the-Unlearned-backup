@@ -39,6 +39,13 @@
 [ext_resource type="Script" uid="uid://jeidtsctbxha" path="res://Player/Scripts/States/state_enrage.gd" id="21_qemgg"]
 [ext_resource type="Script" uid="uid://c5lbhjddxq331" path="res://Player/Scripts/States/state_death.gd" id="26_755ss"]
 [ext_resource type="Script" uid="uid://42jsiefgarnp" path="res://Player/Scripts/player_behavior_logger.gd" id="35_c6x0f"]
+[ext_resource type="Texture2D" uid="uid://bs1lsgvrv8v2b" path="res://GUI/Game Over/gameOverPanel_main.png" id="40_1l10g"]
+[ext_resource type="Texture2D" uid="uid://c54y34grd17pj" path="res://Menu/Assets/Buttons/Restart.png" id="41_6rl0i"]
+[ext_resource type="Texture2D" uid="uid://c4vq2ume67xct" path="res://Menu/Assets/Buttons/Restart_pressed.png" id="42_7x5p2"]
+[ext_resource type="Texture2D" uid="uid://dcmh02xq6rc2s" path="res://Menu/Assets/Buttons/Restart_hover.png" id="43_6eb1q"]
+[ext_resource type="Texture2D" uid="uid://c20jwcg3dkohb" path="res://Menu/Assets/Buttons/main.png" id="44_wvbyc"]
+[ext_resource type="Texture2D" uid="uid://b8wxsaoa54l5r" path="res://Menu/Assets/Buttons/main_pressed.png" id="45_gvnt1"]
+[ext_resource type="Texture2D" uid="uid://ds0bnd56tkuel" path="res://Menu/Assets/Buttons/main_hover.png" id="46_1kmt7"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lfmf2"]
 radius = 13.16
@@ -1092,3 +1099,39 @@ one_shot = true
 
 [node name="PlayerBehaviorLogger" type="Node" parent="." unique_id=247561865]
 script = ExtResource("35_c6x0f")
+
+[node name="gameOverBG" type="CanvasLayer" parent="." unique_id=1536718381]
+layer = 100
+visible = false
+
+[node name="TextureRect" type="TextureRect" parent="gameOverBG" unique_id=857172098]
+offset_left = 646.0
+offset_top = 213.0
+offset_right = 1030.0
+offset_bottom = 501.0
+mouse_filter = 2
+texture = ExtResource("40_1l10g")
+
+[node name="restartBtn" type="TextureButton" parent="gameOverBG/TextureRect" unique_id=2126105351]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 143.0
+offset_right = 228.0
+offset_bottom = 183.0
+texture_normal = ExtResource("41_6rl0i")
+texture_pressed = ExtResource("42_7x5p2")
+texture_hover = ExtResource("43_6eb1q")
+
+[node name="mainMenubtn" type="TextureButton" parent="gameOverBG/TextureRect" unique_id=1625422420]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 181.0
+offset_right = 228.0
+offset_bottom = 221.0
+toggle_mode = true
+texture_normal = ExtResource("44_wvbyc")
+texture_pressed = ExtResource("45_gvnt1")
+texture_hover = ExtResource("46_1kmt7")
+
+[connection signal="pressed" from="gameOverBG/TextureRect/restartBtn" to="." method="_on_restart_btn_pressed"]
+[connection signal="pressed" from="gameOverBG/TextureRect/mainMenubtn" to="." method="_on_main_menubtn_pressed"]

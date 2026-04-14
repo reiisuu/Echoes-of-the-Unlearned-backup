@@ -616,3 +616,11 @@ func register_behavior_slam_attack() -> void:
 
 func die():
 	global_position = checkpoint_position
+
+func _on_restart_btn_pressed() -> void:
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+
+func _on_main_menubtn_pressed() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
