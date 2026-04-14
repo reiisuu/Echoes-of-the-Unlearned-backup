@@ -28,7 +28,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
+mouse_filter = 1
 
 [node name="HPMarginContainer" type="MarginContainer" parent="Control" unique_id=1648265266]
 unique_name_in_owner = true
@@ -38,7 +38,6 @@ offset_left = 11.0
 offset_top = 600.0
 offset_right = 344.0
 offset_bottom = 627.0
-mouse_filter = 2
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Control/HPMarginContainer" unique_id=1349155222]
 layout_mode = 2

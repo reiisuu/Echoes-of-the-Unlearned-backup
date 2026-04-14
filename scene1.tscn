@@ -3831,16 +3831,17 @@ position = Vector2(26.509033, -276.38986)
 scale = Vector2(19.71712, 21.468279)
 shape = SubResource("RectangleShape2D_tqtwb")
 
-[node name="PlayerHud" parent="." unique_id=1758150444 instance=ExtResource("17_vfwod")]
-
 [node name="Enrage_hud" parent="." unique_id=300195571 instance=ExtResource("18_igsrk")]
 
 [node name="heal_hud" parent="." unique_id=372181214 instance=ExtResource("18_di5qy")]
+
+[node name="PlayerHud" parent="." unique_id=1758150444 instance=ExtResource("17_vfwod")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1575777801]
 layer = 10
 
 [node name="pause_menu" parent="CanvasLayer" unique_id=1091801763 instance=ExtResource("16_417ge")]
+mouse_filter = 2
 
 [connection signal="body_entered" from="Checkpoint" to="Checkpoint" method="_on_body_entered"]
 [connection signal="body_entered" from="Barrier1" to="Barrier1" method="_on_body_entered"]
