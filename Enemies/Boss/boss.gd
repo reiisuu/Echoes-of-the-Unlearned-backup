@@ -30,6 +30,10 @@ var _cooldowns := {
 @onready var heavy_hurtbox: Hurtbox = $HeavyHurtbox
 @onready var stomp_hurtbox: Hurtbox = $StompHurtbox
 
+@onready var boss_ai_context: BossAIContext = $BossAIContext
+@onready var boss_api_client: BossAPIClient = $BossAPIClient
+@onready var boss_decision_brain: BossDecisionBrain = $BossDecisionBrain
+
 var _attack_box_base_position: Vector2 = Vector2.ZERO
 var _heavy_box_base_position: Vector2 = Vector2.ZERO
 var _stomp_box_base_position: Vector2 = Vector2.ZERO
@@ -38,6 +42,9 @@ var _active_attack_box: Hurtbox = null
 
 func _ready() -> void:
 	super()
+
+	if max_hp < hp:
+		max_hp = hp
 
 	max_hp_value = hp
 
@@ -85,7 +92,27 @@ func can_use_attack(name: String) -> bool:
 		return true
 	return _cooldowns[name] <= 0.0
 
+func can_use_light_attack() -> bool:
+	return can_use_attack("normal")
+
+func can_use_heavy_attack() -> bool:
+	return can_use_attack("heavy")
+
+func can_use_stomp() -> bool:
+	return can_use_attack("stomp")
+
+func can_use_backstep() -> bool:
+	return can_use_attack("backstep")
+
+func can_use_punish() -> bool:
+	return can_use_attack("punish")
+
+func can_use_phase_transition() -> bool:
+	return in_phase_2 and not has_meta("phase_transition_done")
+
 func mark_attack_used(name: String) -> void:
+	last_attack_used = name
+
 	match name:
 		"normal":
 			_cooldowns["normal"] = normal_cooldown
@@ -97,6 +124,9 @@ func mark_attack_used(name: String) -> void:
 			_cooldowns["punish"] = punish_cooldown
 		"backstep":
 			_cooldowns["backstep"] = backstep_cooldown
+
+	if boss_ai_context != null:
+		boss_ai_context.add_action(name)
 
 func mark_attack_hit() -> void:
 	attack_has_hit = true
@@ -195,3 +225,13 @@ func _player_is_committed() -> bool:
 		charging = player.get("is_charging_attack")
 
 	return attacking or healing or parrying or charging
+
+func get_ai_action() -> String:
+	if boss_decision_brain != null:
+		return boss_decision_brain.consume_decision()
+	return ""
+
+func get_ai_reason() -> String:
+	if boss_decision_brain != null:
+		return boss_decision_brain.last_reason
+	return ""
