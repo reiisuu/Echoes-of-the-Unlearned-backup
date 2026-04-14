@@ -31,11 +31,11 @@
 [ext_resource type="Texture2D" uid="uid://c3acit3up62iv" path="res://PlatformLayout/Sprites/DownLayer.png" id="29_n202p"]
 [ext_resource type="Texture2D" uid="uid://dhe35wsjbc4jc" path="res://PlatformLayout/Sprites/MiddleLayer.png" id="30_lnh1w"]
 [ext_resource type="PackedScene" uid="uid://b272lb2i428oc" path="res://pause_menu.tscn" id="35_miu4f"]
-[ext_resource type="PackedScene" path="res://skill_button.tscn" id="36_2h5c2"]
+[ext_resource type="PackedScene" uid="uid://c7q1cnat0x4hd" path="res://skill_button.tscn" id="36_2h5c2"]
 [ext_resource type="PackedScene" uid="uid://crrudbbb60pdp" path="res://00_Globals/player_hud/player_hud.tscn" id="36_30hra"]
 [ext_resource type="PackedScene" uid="uid://d0bl0bqpptj8m" path="res://Enemies/Boss/boss.tscn" id="37_apwgh"]
 [ext_resource type="Script" uid="uid://hf72new3qhw5" path="res://barrier_3.gd" id="37_ick5v"]
-[ext_resource type="PackedScene" path="res://00_Globals/heal_hud.tscn" id="37_w5q1n"]
+[ext_resource type="PackedScene" uid="uid://c3geqknt11du3" path="res://00_Globals/heal_hud.tscn" id="37_w5q1n"]
 [ext_resource type="Script" uid="uid://dn1ixbbrvarml" path="res://checkpoint.gd" id="38_pncca"]
 [ext_resource type="Texture2D" uid="uid://cw5rya4we7xg" path="res://PlatformLayout/Sprites/Green Portal Sprite Sheet.png" id="39_w2war"]
 [ext_resource type="Script" uid="uid://dlcsgyoxdl2fs" path="res://barrier_1.gd" id="40_dph4e"]
@@ -14563,6 +14563,7 @@ layer = 10
 [node name="pause_menu" parent="CanvasLayer" unique_id=1091801763 instance=ExtResource("35_miu4f")]
 
 [node name="Checkpoint" type="Area2D" parent="." unique_id=270874863 groups=["player"]]
+visible = false
 position = Vector2(15259, 2449)
 scale = Vector2(0.5838542, 4.4092693)
 script = ExtResource("38_pncca")
