@@ -48,8 +48,6 @@ func _ready() -> void:
 	if stomp_hurtbox:
 		_stomp_box_base_position = stomp_hurtbox.position
 
-	_connect_attack_hurtbox_signals()
-
 	if attack_hurtbox:
 		attack_hurtbox.monitoring = false
 	if heavy_hurtbox:
@@ -60,14 +58,14 @@ func _ready() -> void:
 	_active_attack_box = null
 	reset_attack_window()
 
-func _physics_process(_delta: float) -> void:
-	_tick_cooldowns(_delta)
+func _physics_process(delta: float) -> void:
+	_tick_cooldowns(delta)
 	_try_enter_phase_2()
-	super(_delta)
+	super(delta)
 
-func _tick_cooldowns(_delta: float) -> void:
+func _tick_cooldowns(delta: float) -> void:
 	for key in _cooldowns.keys():
-		_cooldowns[key] = max(_cooldowns[key] - _delta, 0.0)
+		_cooldowns[key] = max(_cooldowns[key] - delta, 0.0)
 
 func _try_enter_phase_2() -> void:
 	if in_phase_2:
@@ -100,6 +98,12 @@ func mark_attack_used(name: String) -> void:
 		"backstep":
 			_cooldowns["backstep"] = backstep_cooldown
 
+func mark_attack_hit() -> void:
+	attack_has_hit = true
+
+	if _active_attack_box:
+		_active_attack_box.monitoring = false
+
 func face_player(dx: float) -> void:
 	if abs(dx) < 0.01:
 		return
@@ -121,41 +125,7 @@ func _apply_box_facing() -> void:
 	if stomp_hurtbox:
 		stomp_hurtbox.position = _stomp_box_base_position
 
-func _connect_attack_hurtbox_signals() -> void:
-	_connect_single_attack_hurtbox(attack_hurtbox)
-	_connect_single_attack_hurtbox(heavy_hurtbox)
-	_connect_single_attack_hurtbox(stomp_hurtbox)
-
-func _connect_single_attack_hurtbox(box: Hurtbox) -> void:
-	if box == null:
-		return
-
-	# Make sure the attack hurtboxes behave like the enemy attack hurtbox:
-	# they damage the player only while monitoring is enabled.
-	if box.area_entered.is_connected(_on_attack_hurtbox_area_entered):
-		box.area_entered.disconnect(_on_attack_hurtbox_area_entered)
-
-	box.area_entered.connect(_on_attack_hurtbox_area_entered)
-
-func _on_attack_hurtbox_area_entered(area: Area2D) -> void:
-	if not attack_can_damage:
-		return
-
-	if attack_has_hit:
-		return
-
-	if area == null:
-		return
-
-	# Same flow as your enemy attack logic:
-	# if the player's hitbox/hurtbox system calls takeDamage through Hurtbox/Hitbox interaction,
-	# enabling the boss attack hurtbox is enough.
-	# This guard prevents multi-hit spam from one swing.
-	attack_has_hit = true
-
 func use_attack_box(box_name: String) -> void:
-	reset_attack_window()
-
 	match box_name:
 		"attack":
 			_active_attack_box = attack_hurtbox
@@ -210,9 +180,18 @@ func _player_is_committed() -> bool:
 	if player == null:
 		return false
 
-	var attacking: bool = bool(player.get("is_attacking"))
-	var healing: bool = bool(player.get("is_healing"))
-	var parrying: bool = bool(player.get("is_parrying"))
-	var charging: bool = bool(player.get("is_charging_attack"))
+	var attacking: bool = false
+	var healing: bool = false
+	var parrying: bool = false
+	var charging: bool = false
+
+	if player.get("is_attacking") != null:
+		attacking = player.get("is_attacking")
+	if player.get("is_healing") != null:
+		healing = player.get("is_healing")
+	if player.get("is_parrying") != null:
+		parrying = player.get("is_parrying")
+	if player.get("is_charging_attack") != null:
+		charging = player.get("is_charging_attack")
 
 	return attacking or healing or parrying or charging

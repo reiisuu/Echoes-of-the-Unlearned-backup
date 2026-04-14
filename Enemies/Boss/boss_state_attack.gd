@@ -16,7 +16,6 @@ func Enter() -> void:
 		return
 
 	boss.mark_attack_used("normal")
-	boss.use_attack_box("attack")
 
 	if enemy.player != null:
 		var dx := enemy.player.global_position.x - enemy.global_position.x
@@ -27,14 +26,15 @@ func Enter() -> void:
 
 	enemy.velocity.x = 0.0
 	enemy.reset_attack_window()
+	boss.use_attack_box("attack")
 	enemy.updateAnimation("attack")
 
 func Exit() -> void:
 	enemy.velocity.x = 0.0
 	enemy.reset_attack_window()
 
-func process(_delta: float) -> EnemyState:
-	timer += _delta
+func process(delta: float) -> EnemyState:
+	timer += delta
 
 	if enemy.player != null:
 		var boss := enemy as Boss

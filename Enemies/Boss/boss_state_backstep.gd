@@ -39,8 +39,8 @@ func Exit() -> void:
 	enemy.velocity.x = 0.0
 	enemy.reset_attack_window()
 
-func process(_delta: float) -> EnemyState:
-	timer += _delta
+func process(delta: float) -> EnemyState:
+	timer += delta
 
 	if timer >= duration:
 		return chase
