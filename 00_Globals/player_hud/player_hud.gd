@@ -1,4 +1,4 @@
-class_name PlayerHud
+class_name BossHud
 extends CanvasLayer
 
 @onready var hp_bar: TextureProgressBar = $Control/HPMarginContainer/NinePatchRect/HPBar
