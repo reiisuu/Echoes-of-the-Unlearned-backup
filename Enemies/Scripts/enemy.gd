@@ -389,3 +389,7 @@ func reset_attack_window() -> void:
 
 func mark_attack_hit() -> void:
 	attack_has_hit = true
+
+
+func _on_kill_floor_body_entered(body: Node2D) -> void:
+	pass # Replace with function body.

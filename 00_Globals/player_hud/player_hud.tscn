@@ -34,10 +34,10 @@ mouse_filter = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 20)
 layout_mode = 0
-offset_left = 16.0
-offset_top = 568.0
+offset_left = 11.0
+offset_top = 600.0
 offset_right = 344.0
-offset_bottom = 595.0
+offset_bottom = 627.0
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Control/HPMarginContainer" unique_id=1349155222]
 layout_mode = 2
