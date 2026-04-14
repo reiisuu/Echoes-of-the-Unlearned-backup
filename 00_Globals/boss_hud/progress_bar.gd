@@ -19,8 +19,4 @@ func _process(delta):
 	if($ProgressBar2.value - value <= 0.5):
 		$ProgressBar2.value = value
 		set_process(false)
-	#or
-	#$ProgressBar2.value -= 0.8
-	#if($ProgressBar2.value <= value):
-	#	$ProgressBar2.value = value
-	#	set_process(false)
+	
