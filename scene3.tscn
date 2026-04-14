@@ -14357,7 +14357,7 @@ size = Vector2(6342, 720)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2h5c2"]
 size = Vector2(272.2965, 7037.2)
 
-[node name="Playground" type="Node2D" unique_id=1525192332]
+[node name="Playground2" type="Node2D" unique_id=1525192332]
 y_sort_enabled = true
 
 [node name="Player" parent="." unique_id=1872429895 groups=["player"] instance=ExtResource("1_j26qc")]
