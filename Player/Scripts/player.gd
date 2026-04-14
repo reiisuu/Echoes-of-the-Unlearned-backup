@@ -615,7 +615,7 @@ func register_behavior_slam_attack() -> void:
 		behavior_logger.register_slam_attack()
 
 func die():
-<<<<<<< HEAD
+
 	global_position = checkpoint_position
 
 func _on_restart_btn_pressed() -> void:
@@ -624,10 +624,8 @@ func _on_restart_btn_pressed() -> void:
 
 func _on_main_menubtn_pressed() -> void:
 	get_tree().paused = false
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
-=======
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn") 
 	LivesManager.current_lives -= 1
-	
 	if LivesManager.current_lives <= 0:
 		LivesManager.reset_game_state()
 	else:
@@ -640,4 +638,3 @@ func _on_main_menubtn_pressed() -> void:
 		# If you use a State Machine, make sure to set it back to Idle
 		if state_machine:
 			state_machine.ChangeState($StateMachine/Idle)
->>>>>>> 299d4574adb05b9a28b8447d25eac9a6f9aa2a6a
