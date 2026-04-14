@@ -24,10 +24,3 @@ func _process(delta):
 	#if($ProgressBar2.value <= value):
 	#	$ProgressBar2.value = value
 	#	set_process(false)
-
-
-func _on_button_pressed() -> void:
-	if(value <= 0):
-		set_bar_value(100)
-	else:
-		set_bar_value(value - 10)
