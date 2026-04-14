@@ -14,6 +14,10 @@ extends EnemyState
 @export var stomp_attack_range: float = 120.0
 @export var stop_distance: float = 18.0
 
+@export var emergency_backstep_distance: float = 36.0
+@export var backstep_chance_close: float = 0.6
+@export var backstep_chance_normal: float = 0.35
+
 func Enter() -> void:
 	enemy.updateAnimation("walk")
 	enemy.reset_attack_window()
@@ -35,47 +39,53 @@ func process(_delta: float) -> EnemyState:
 
 	boss.face_player(dx)
 
-	# optional one-time phase transition
 	if boss.in_phase_2 and phase_transition != null and not boss.has_meta("phase_transition_done"):
 		boss.set_meta("phase_transition_done", true)
 		return phase_transition
 
-	# highest priority defensive reaction when player is too close
-	if dist <= boss.backstep_trigger_distance:
-		if boss.should_backstep(dist):
+	# backstep stays high priority
+	if boss.can_use_attack("backstep"):
+		if dist <= emergency_backstep_distance and randf() < backstep_chance_close:
 			return backstep
 
-	# punish committed player if nearby
-	if dist <= boss.punish_distance:
-		if boss.should_force_punish(dist):
-			return punish
+		if dist <= boss.backstep_trigger_distance:
+			if boss.should_backstep(dist) or randf() < backstep_chance_normal:
+				return backstep
 
-	# close-range primary attack
+	# punish stays reactive
+	if dist <= boss.punish_distance and boss.should_force_punish(dist):
+		return punish
+
+	var choices: Array[Dictionary] = []
+
+	# close range
 	if dist <= normal_attack_range:
 		if boss.can_use_attack("normal"):
-			return attack
-
-		# fallback if normal is on cooldown
-		if boss.can_use_attack("heavy") and dist <= heavy_attack_range:
-			return heavy
-
-	# mid-range attack
-	if dist <= heavy_attack_range:
+			_add_weighted_choice(choices, attack, "normal", 3)
 		if boss.can_use_attack("heavy"):
-			return heavy
+			_add_weighted_choice(choices, heavy, "heavy", 2)
+		if boss.can_use_attack("stomp") and boss.in_phase_2:
+			_add_weighted_choice(choices, stomp, "stomp", 1)
 
-		# fallback if heavy is on cooldown and player is still close enough
-		if boss.can_use_attack("normal") and dist <= normal_attack_range:
-			return attack
-
-	# longer-range pressure
-	if dist <= stomp_attack_range:
+	# mid range
+	elif dist <= heavy_attack_range:
+		if boss.can_use_attack("heavy"):
+			_add_weighted_choice(choices, heavy, "heavy", 3)
+		if boss.can_use_attack("normal") and dist <= normal_attack_range + 10.0:
+			_add_weighted_choice(choices, attack, "normal", 1)
 		if boss.can_use_attack("stomp"):
-			return stomp
+			_add_weighted_choice(choices, stomp, "stomp", 2)
 
-		# fallback so boss still feels active if stomp is cooling down
-		if boss.can_use_attack("heavy") and dist <= heavy_attack_range:
-			return heavy
+	# long range
+	elif dist <= stomp_attack_range:
+		if boss.can_use_attack("stomp"):
+			_add_weighted_choice(choices, stomp, "stomp", 3)
+		if boss.can_use_attack("heavy"):
+			_add_weighted_choice(choices, heavy, "heavy", 1)
+
+	var chosen_state := _pick_non_repeating_choice(choices, boss.last_attack_used)
+	if chosen_state != null:
+		return chosen_state
 
 	return null
 
@@ -101,3 +111,24 @@ func physics(_delta: float) -> EnemyState:
 		enemy.velocity.x = dir * boss.get_chase_speed()
 
 	return null
+
+func _add_weighted_choice(choices: Array[Dictionary], state: EnemyState, attack_name: String, weight: int) -> void:
+	for i in range(weight):
+		choices.append({
+			"state": state,
+			"name": attack_name
+		})
+
+func _pick_non_repeating_choice(choices: Array[Dictionary], last_attack_name: String) -> EnemyState:
+	if choices.is_empty():
+		return null
+
+	var filtered: Array[Dictionary] = []
+
+	for choice in choices:
+		if String(choice["name"]) != last_attack_name:
+			filtered.append(choice)
+
+	var pool := filtered if not filtered.is_empty() else choices
+	var picked: Dictionary = pool[randi() % pool.size()]
+	return picked["state"]

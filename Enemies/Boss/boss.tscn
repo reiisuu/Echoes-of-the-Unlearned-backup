@@ -28,10 +28,10 @@ size = Vector2(37.205, 64)
 size = Vector2(30.4375, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_attack_box"]
-size = Vector2(34, 48)
+size = Vector2(43.875, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_heavy_box"]
-size = Vector2(46, 56)
+size = Vector2(74.545, 56)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_stomp_box"]
 size = Vector2(78, 14)
@@ -906,14 +906,14 @@ shape = SubResource("RectangleShape2D_jgng2")
 debug_color = Color(0.8112211, 0.40642446, 0.15495872, 0.41960785)
 
 [node name="AttackHurtbox" parent="." unique_id=1740011001 instance=ExtResource("2_tvwxn")]
-position = Vector2(12, -32)
+position = Vector2(-3.94, -32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHurtbox" unique_id=1740011002]
 shape = SubResource("RectangleShape2D_attack_box")
 debug_color = Color(0.8509804, 0.30588236, 0.27058825, 0.41960785)
 
 [node name="HeavyHurtbox" parent="." unique_id=1740011003 instance=ExtResource("2_tvwxn")]
-position = Vector2(18, -34)
+position = Vector2(0.235, -34)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HeavyHurtbox" unique_id=1740011004]
 shape = SubResource("RectangleShape2D_heavy_box")
