@@ -31,7 +31,7 @@ func process(_delta: float) -> EnemyState:
 		return idle
 
 	var dx := enemy.player.global_position.x - enemy.global_position.x
-	var dist : float = abs(dx)
+	var dist: float = abs(dx)
 
 	boss.face_player(dx)
 
@@ -40,23 +40,42 @@ func process(_delta: float) -> EnemyState:
 		boss.set_meta("phase_transition_done", true)
 		return phase_transition
 
-	# backstep only when very close and player is committed
-	if dist <= boss.backstep_trigger_distance and boss.should_backstep(dist):
-		return backstep
+	# highest priority defensive reaction when player is too close
+	if dist <= boss.backstep_trigger_distance:
+		if boss.should_backstep(dist):
+			return backstep
 
-	# punish if player commits nearby
-	if dist <= boss.punish_distance and boss.should_force_punish(dist):
-		return punish
+	# punish committed player if nearby
+	if dist <= boss.punish_distance:
+		if boss.should_force_punish(dist):
+			return punish
 
-	# standard distance-based attack selection
-	if dist <= normal_attack_range and boss.can_use_attack("normal"):
-		return attack
+	# close-range primary attack
+	if dist <= normal_attack_range:
+		if boss.can_use_attack("normal"):
+			return attack
 
-	if dist <= heavy_attack_range and boss.can_use_attack("heavy"):
-		return heavy
+		# fallback if normal is on cooldown
+		if boss.can_use_attack("heavy") and dist <= heavy_attack_range:
+			return heavy
 
-	if dist <= stomp_attack_range and boss.can_use_attack("stomp"):
-		return stomp
+	# mid-range attack
+	if dist <= heavy_attack_range:
+		if boss.can_use_attack("heavy"):
+			return heavy
+
+		# fallback if heavy is on cooldown and player is still close enough
+		if boss.can_use_attack("normal") and dist <= normal_attack_range:
+			return attack
+
+	# longer-range pressure
+	if dist <= stomp_attack_range:
+		if boss.can_use_attack("stomp"):
+			return stomp
+
+		# fallback so boss still feels active if stomp is cooling down
+		if boss.can_use_attack("heavy") and dist <= heavy_attack_range:
+			return heavy
 
 	return null
 
@@ -71,8 +90,8 @@ func physics(_delta: float) -> EnemyState:
 		return null
 
 	var dx := enemy.player.global_position.x - enemy.global_position.x
-	var dist : float = abs(dx)
-	var dir : float = sign(dx)
+	var dist: float = abs(dx)
+	var dir: float = sign(dx)
 
 	boss.face_player(dx)
 

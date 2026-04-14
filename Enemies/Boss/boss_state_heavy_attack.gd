@@ -12,20 +12,35 @@ var active: bool = false
 
 func Enter() -> void:
 	var boss := enemy as Boss
+	if boss == null:
+		return
+
 	boss.mark_attack_used("heavy")
-	boss.use_attack_box("heavy")
+
+	if enemy.player != null:
+		var dx := enemy.player.global_position.x - enemy.global_position.x
+		boss.face_player(dx)
 
 	timer = 0.0
 	active = false
 
+	enemy.velocity.x = 0.0
 	enemy.reset_attack_window()
+	boss.use_attack_box("heavy")
 	enemy.updateAnimation("heavy")
 
 func Exit() -> void:
+	enemy.velocity.x = 0.0
 	enemy.reset_attack_window()
 
-func process(_delta: float) -> EnemyState:
-	timer += _delta
+func process(delta: float) -> EnemyState:
+	timer += delta
+
+	if enemy.player != null:
+		var boss := enemy as Boss
+		if boss != null:
+			var dx := enemy.player.global_position.x - enemy.global_position.x
+			boss.face_player(dx)
 
 	var f := enemy.sprite.frame
 	var should_hit := f >= hit_start_frame and f <= hit_end_frame
